@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { COLORS, DEPTH, GAME_HEIGHT, GAME_WIDTH, PLAYER, SCORING } from '../config/settings';
+import { COLORS, DEPTH, GAME_HEIGHT, GAME_WIDTH, PLAYER, SCORING, VICTORY } from '../config/settings';
 import { ArcadeButton } from '../ui/ArcadeButton';
 import { arcadeText } from '../ui/text';
 import { Background } from '../world/Background';
@@ -12,7 +12,7 @@ const LINES: { icon: string | null; text: string }[] = [
   { icon: null, text: `ACIERTOS SEGUIDOS = COMBO (HASTA x${SCORING.combo.maxMultiplier}).\nFALLAR REINICIA EL COMBO.` },
   { icon: 'iconVultureEmpty', text: `SI UN GALLINAZO ESCAPA PIERDES UNA VIDA.\nVIDA EXTRA CADA ${PLAYER.extraLifeEvery} PUNTOS.` },
   { icon: null, text: `NIVEL PERFECTO: +${SCORING.perfectLevelBonus}.   P / ESC: PAUSA   M: SONIDO` },
-  { icon: 'serforBadge', text: 'AGUANTA HASTA QUE TERMINE LA CANCIÓN PARA GANAR...\nPERO CUIDADO: ¡SERFOR VIGILA A LOS CAZADORES!' },
+  { icon: 'serforBadge', text: `SUPERA LOS ${VICTORY.levels} NIVELES (CADA UNO MÁS DIFÍCIL) PARA GANAR...\nPERO CUIDADO: ¡SERFOR VIGILA A LOS CAZADORES!` },
 ];
 
 export class HowToPlayScene extends Phaser.Scene {

@@ -1,5 +1,5 @@
 -- GALLINAZO HUNT — esquema Supabase (Fase 3 / preparación Fase 4)
--- Ejecutar en el SQL Editor de Supabase.
+-- Ejecutar en el SQL Editor de Supabase. Se puede ejecutar más de una vez sin errores.
 
 create extension if not exists "pgcrypto";
 
@@ -68,6 +68,9 @@ create table if not exists public.scores (
   created_at timestamptz not null default now()
 );
 
+-- Por si la tabla se creó con una versión anterior del esquema
+alter table public.scores add column if not exists won boolean not null default false;
+
 create index if not exists scores_score_idx on public.scores (game_id, score desc);
 create index if not exists scores_created_idx on public.scores (game_id, created_at desc);
 create index if not exists scores_event_idx on public.scores (event_id, score desc);
@@ -85,13 +88,19 @@ alter table public.users enable row level security;
 alter table public.game_sessions enable row level security;
 alter table public.scores enable row level security;
 
+drop policy if exists "users: lectura pública" on public.users;
 create policy "users: lectura pública" on public.users for select using (true);
+drop policy if exists "users: editar el propio" on public.users;
 create policy "users: editar el propio" on public.users for all using (auth.uid() = id) with check (auth.uid() = id);
 
+drop policy if exists "sessions: crear" on public.game_sessions;
 create policy "sessions: crear" on public.game_sessions for insert with check (user_id is null or auth.uid() = user_id);
+drop policy if exists "sessions: ver las propias" on public.game_sessions;
 create policy "sessions: ver las propias" on public.game_sessions for select using (auth.uid() = user_id);
 
+drop policy if exists "scores: lectura pública" on public.scores;
 create policy "scores: lectura pública" on public.scores for select using (true);
+drop policy if exists "scores: insertar" on public.scores;
 create policy "scores: insertar" on public.scores for insert with check (user_id is null or auth.uid() = user_id);
 
 -- NOTA: para producción conviene validar partidas en una Edge Function

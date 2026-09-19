@@ -64,7 +64,10 @@ export class SpawnSystem {
     this.timers = [];
     this.pendingSpawns = 0;
     this.fleeOnSpawn = false;
-    this.inPlay.forEach((v) => v.deactivate());
+    // Al cerrar la escena los sprites ya pueden estar destruidos (sin `scene`)
+    this.inPlay.forEach((v) => {
+      if (v.scene) v.deactivate();
+    });
     this.inPlay.clear();
   }
 

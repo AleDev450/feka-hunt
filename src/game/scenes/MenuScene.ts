@@ -69,6 +69,9 @@ export class MenuScene extends Phaser.Scene {
       { width: 640, height: 46, fontSize: 12, color: COLORS.red },
     );
     credit.setDepth(DEPTH.hud);
+    arcadeText(this, GAME_WIDTH / 2, 704, `JUEGO CREADO POR ${CREDITS.author}`, 9, { color: COLORS.white })
+      .setDepth(DEPTH.hud)
+      .setAlpha(0.85);
     this.tweens.add({ targets: credit, scale: 1.04, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
   }
 

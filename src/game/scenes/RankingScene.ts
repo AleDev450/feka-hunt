@@ -65,7 +65,7 @@ export class RankingScene extends Phaser.Scene {
       if (id !== this.requestId || !this.scene.isActive()) return;
       this.status.setText(entries.length === 0 ? arcadeString('AÚN NO HAY PUNTUACIONES') : '');
       entries.forEach((entry, i) => {
-        const name = arcadeString(entry.playerName).padEnd(8, ' ');
+        const name = arcadeString(entry.playerName).padEnd(12, ' ');
         this.rows[i].setText(`#${i + 1}  ${name} ${padScore(entry.score)}  NV${entry.level}`);
       });
     } catch {

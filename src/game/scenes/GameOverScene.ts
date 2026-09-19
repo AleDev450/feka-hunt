@@ -3,9 +3,9 @@ import type { GameResult } from '@/types/game';
 import { COLORS, DEPTH, GAME_HEIGHT, GAME_WIDTH, STORAGE_KEYS } from '../config/settings';
 import { getServices } from '../config/services';
 import { ArcadeButton } from '../ui/ArcadeButton';
-import { InitialsInput } from '../ui/InitialsInput';
+import { MAX_NAME_LENGTH, NameInput } from '../ui/NameInput';
 import { arcadeString, arcadeText } from '../ui/text';
-import { padScore, storage } from '../utils/gameUtils';
+import { isTouchDevice, padScore, storage } from '../utils/gameUtils';
 import { Background } from '../world/Background';
 import { SCENES } from './keys';
 
@@ -75,12 +75,19 @@ export class GameOverScene extends Phaser.Scene {
   private createNameEntry(result: GameResult): void {
     const cx = GAME_WIDTH / 2;
     const { scores } = getServices(this);
-    arcadeText(this, cx, 330, 'TU NOMBRE', 14, { color: COLORS.goldText }).setDepth(DEPTH.hud);
-    const input = new InitialsInput(this, cx - 120, 420, storage.get(STORAGE_KEYS.playerName) ?? 'AAA').setDepth(DEPTH.hud);
-    const status = arcadeText(this, cx, 520, '', 12, { color: COLORS.grey }).setDepth(DEPTH.hud);
+    arcadeText(this, cx, 350, `TU NOMBRE (MÁXIMO ${MAX_NAME_LENGTH} LETRAS)`, 14, { color: COLORS.goldText }).setDepth(DEPTH.hud);
+    const input = new NameInput(this, cx - 130, 420, storage.get(STORAGE_KEYS.playerName) ?? '').setDepth(DEPTH.hud);
+    // En desktop se puede escribir directo; en móvil el foco lo da el toque (abre el teclado)
+    if (!isTouchDevice()) input.focus();
+    const status = arcadeText(this, cx, 510, '', 12, { color: COLORS.grey }).setDepth(DEPTH.hud);
 
     const save = async () => {
       if (this.saved) return;
+      if (!input.value) {
+        status.setText('ESCRIBE TU NOMBRE PRIMERO').setColor(COLORS.redText);
+        input.focus();
+        return;
+      }
       this.saved = true;
       input.setEnabled(false);
       saveButton.setVisible(false);
@@ -103,7 +110,7 @@ export class GameOverScene extends Phaser.Scene {
         status.setText('NO SE PUDO GUARDAR. INTENTA DE NUEVO').setColor(COLORS.redText);
       }
     };
-    const saveButton = new ArcadeButton(this, cx + 170, 420, 'GUARDAR', () => void save(), { width: 230, fontSize: 14 });
+    const saveButton = new ArcadeButton(this, cx + 230, 420, 'GUARDAR', () => void save(), { width: 230, fontSize: 14 });
     saveButton.setDepth(DEPTH.hud);
     this.input.keyboard?.on('keydown-ENTER', () => void save());
   }

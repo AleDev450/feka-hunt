@@ -30,8 +30,8 @@ const ramp = (r: Ramp, level: number): number => {
   return value;
 };
 
-const unlocked = <T extends { fromLevel: number }>(items: readonly T[], level: number): T[] =>
-  items.filter((item) => level >= item.fromLevel);
+const unlocked = <T extends { fromLevel: number; toLevel?: number }>(items: readonly T[], level: number): T[] =>
+  items.filter((item) => level >= item.fromLevel && level <= (item.toLevel ?? Infinity));
 
 /** Única fuente de verdad de la dificultad por nivel. */
 export const DifficultySystem = {

@@ -48,8 +48,8 @@ export const audioCacheKey = (key: SfxKey | LoopKey): string => `audio-${key}`;
  * Sonido del juego.
  *  - Efectos: archivos reales si existen en la caché de Phaser; si no,
  *    placeholders sintetizados con WebAudio.
- *  - Soundtrack: se reproduce en streaming con un <audio> (no se decodifica
- *    entero en memoria) y suena en paralelo a los efectos.
+ *  - Soundtrack: se reproduce en bucle y en streaming con un <audio> (no se
+ *    decodifica entero en memoria) y suena en paralelo a los efectos.
  */
 export class AudioSystem {
   private ctx: AudioContext | null = null;
@@ -60,9 +60,7 @@ export class AudioSystem {
   private track: HTMLAudioElement | null = null;
   private love: HTMLAudioElement | null = null;
   private trackActive = false;
-  private trackBlocked = false;
   private trackPrimed = false;
-  private onTrackEnded: (() => void) | null = null;
   private fileSiren: Phaser.Sound.BaseSound | null = null;
   private siren: { osc: OscillatorNode; lfo: OscillatorNode; gain: GainNode } | null = null;
   private _muted = storage.get(STORAGE_KEYS.muted) === '1';
@@ -170,18 +168,15 @@ export class AudioSystem {
     }
   }
 
-  /** Inicia el soundtrack desde el principio; `onEnded` se llama cuando termina. */
-  startSoundtrack(onEnded: () => void): void {
+  /** Inicia el soundtrack (en bucle) desde el principio. */
+  startSoundtrack(): void {
     const track = this.ensureTrack();
     if (!track) return;
     this.trackActive = true;
-    this.onTrackEnded = onEnded;
     track.currentTime = 0;
     track.muted = this._muted;
-    this.trackBlocked = false;
     track.play().catch(() => {
-      // Autoplay bloqueado: la partida sigue con el reloj de respaldo
-      this.trackBlocked = true;
+      // Autoplay bloqueado: el juego sigue sin música
     });
   }
 
@@ -195,16 +190,9 @@ export class AudioSystem {
 
   stopSoundtrack(): void {
     this.trackActive = false;
-    this.onTrackEnded = null;
     if (!this.track) return;
     this.track.pause();
     this.track.currentTime = 0;
-  }
-
-  /** Posición actual del soundtrack (ms), también en pausa; null si no pudo sonar. */
-  get soundtrackPositionMs(): number | null {
-    const track = this.track;
-    return track && this.trackActive && !this.trackBlocked ? track.currentTime * 1000 : null;
   }
 
   /** Reproduce "te amo gordo" desde el inicio. Devuelve su duración en ms. */
@@ -223,11 +211,6 @@ export class AudioSystem {
 
   resumeLoveClip(): void {
     if (this.love && this.love.currentTime > 0 && !this.love.ended) this.love.play().catch(() => undefined);
-  }
-
-  get soundtrackDurationMs(): number {
-    const duration = this.track?.duration;
-    return duration && Number.isFinite(duration) ? duration * 1000 : SOUNDTRACK.durationMs;
   }
 
   /** Sirena de patrulla (SERFOR): barrido "wail" continuo hasta stopSiren(). */
@@ -363,12 +346,7 @@ export class AudioSystem {
     track.preload = 'auto';
     track.volume = SOUNDTRACK.volume;
     track.muted = this._muted;
-    track.addEventListener('ended', () => {
-      const callback = this.onTrackEnded;
-      this.trackActive = false;
-      this.onTrackEnded = null;
-      callback?.();
-    });
+    track.loop = true;
     this.track = track;
     return track;
   }

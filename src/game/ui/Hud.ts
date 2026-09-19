@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { COLORS, DEPTH, GAME_HEIGHT, PLAYER } from '../config/settings';
+import { COLORS, DEPTH, GAME_HEIGHT, PLAYER, VICTORY } from '../config/settings';
 import { padScore } from '../utils/gameUtils';
 import { TEX } from './proceduralTextures';
 import { arcadeText } from './text';
@@ -28,7 +28,6 @@ export class Hud {
   private readonly recordText: Phaser.GameObjects.Text;
   private readonly levelText: Phaser.GameObjects.Text;
   private readonly comboText: Phaser.GameObjects.Text;
-  private readonly timeText: Phaser.GameObjects.Text;
   private readonly hearts: Phaser.GameObjects.Image[] = [];
   private readonly shells: Phaser.GameObjects.Image[] = [];
   private readonly ammoCount: Phaser.GameObjects.Text;
@@ -74,14 +73,12 @@ export class Hud {
     label(659, TOP_Y + 16, 'RÉCORD');
     this.recordText = label(659, TOP_Y + 46, '000000', COLORS.white, 22);
 
-    // Nivel, combo y tiempo restante de la canción
+    // Nivel actual / total y combo
     panel(778, TOP_Y, 300, TOP_H, COLORS.gold);
-    label(822, TOP_Y + 16, 'NIVEL');
-    this.levelText = label(822, TOP_Y + 46, '1', COLORS.white, 22);
-    label(916, TOP_Y + 16, 'COMBO');
-    this.comboText = label(916, TOP_Y + 46, 'x1', COLORS.white, 22);
-    label(1022, TOP_Y + 16, 'TIEMPO');
-    this.timeText = label(1022, TOP_Y + 46, '0:00', COLORS.white, 18);
+    label(862, TOP_Y + 16, 'NIVEL');
+    this.levelText = label(862, TOP_Y + 46, '1/1', COLORS.white, 20);
+    label(1006, TOP_Y + 16, 'COMBO');
+    this.comboText = label(1006, TOP_Y + 46, 'x1', COLORS.white, 22);
 
     // Botones: pausa y sonido
     const pause = this.iconButton(1112, callbacks.onPause);
@@ -120,12 +117,7 @@ export class Hud {
   }
 
   setLevel(level: number): void {
-    this.levelText.setText(String(level));
-  }
-
-  setTime(seconds: number): void {
-    const text = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
-    this.timeText.setText(text).setColor(seconds <= 10 ? COLORS.redText : COLORS.white);
+    this.levelText.setText(`${level}/${VICTORY.levels}`);
   }
 
   setCombo(multiplier: number, combo: number): void {

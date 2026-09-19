@@ -43,7 +43,7 @@ export const PLAYER = {
   lives: 3,
   maxLives: 5,
   /** Cartuchos máximos visibles en el HUD */
-  magazineSize: 5,
+  magazineSize: 6,
   /** Vida extra cada X puntos */
   extraLifeEvery: 10000,
 } as const;
@@ -63,18 +63,16 @@ export const SCORING = {
   livesLostPerEscape: 1,
 } as const;
 
-/**
- * Soundtrack de la partida. La canción es el reloj del juego: si llegas vivo
- * al final de la canción ganas; en cualquier caso, al terminar llega SERFOR.
- */
+/** Soundtrack de la partida: suena en bucle mientras se juega. */
 export const SOUNDTRACK = {
   src: '/assets/audio/soundtrack.mp3',
-  /** Duración de referencia (se usa si el navegador aún no conoce la real) */
-  durationMs: 175_300,
   /** Volumen bajo para que los efectos (disparos, sirena...) se sigan oyendo */
   volume: 0.45,
-  /** Margen antes de terminar por tiempo si el audio no pudo reproducirse */
-  fallbackGraceMs: 3000,
+} as const;
+
+/** Condición de victoria: superar este nivel. Al terminar (gane o pierda) llega SERFOR. */
+export const VICTORY = {
+  levels: 50,
 } as const;
 
 /**
@@ -93,8 +91,9 @@ export const LOVE = {
   volume: 1,
 } as const;
 
-/** Créditos de la música */
+/** Créditos (autor del juego y música) */
 export const CREDITS = {
+  author: 'KICK/NARUTOMAKI',
   artist: 'PIURANO27',
   videoUrl: 'https://www.youtube.com/watch?v=7fsMy1FpgsI',
 } as const;
@@ -143,24 +142,30 @@ export const TIMING = {
 /**
  * Parámetros de dificultad. DifficultySystem interpola a partir de estos
  * valores; ningún otro archivo debe decidir velocidades o tiempos por nivel.
+ * Las rampas están calculadas para que TODO siga endureciéndose hasta el
+ * nivel 50 (los topes se alcanzan justo en el último nivel).
  */
 export const DIFFICULTY = {
   vulturesPerLevel: 8,
-  speed: { base: 150, perLevel: 26, max: 430, jitter: 0.15 },
-  flyTimeMs: { base: 7000, perLevel: -450, min: 3200 },
+  /** Nivel 1: 150 px/s → nivel 50: ~520 px/s */
+  speed: { base: 150, perLevel: 7.6, max: 520, jitter: 0.15 },
+  /** Nivel 1: 7 s para disparar → nivel 50: 2.6 s */
+  flyTimeMs: { base: 7000, perLevel: -90, min: 2600 },
   /** Frecuencia del aleteo (fps de la animación) */
-  flapFps: { base: 9, perLevel: 0.8, max: 16 },
+  flapFps: { base: 9, perLevel: 0.18, max: 18 },
   /** A partir de qué nivel vuelan N gallinazos a la vez */
   simultaneous: [
     { fromLevel: 1, count: 1 },
     { fromLevel: 3, count: 2 },
-    { fromLevel: 6, count: 3 },
+    { fromLevel: 12, count: 3 },
+    { fromLevel: 30, count: 4 },
   ],
   /** Disparos por tanda = base + extra por gallinazo adicional (tope: magazineSize) */
   shots: { base: 3, perExtraVulture: 1 },
+  /** Trayectorias disponibles; las fáciles dejan de salir en niveles altos */
   patterns: [
-    { fromLevel: 1, pattern: 'straight' },
-    { fromLevel: 2, pattern: 'wave' },
+    { fromLevel: 1, toLevel: 20, pattern: 'straight' },
+    { fromLevel: 2, toLevel: 38, pattern: 'wave' },
     { fromLevel: 3, pattern: 'zigzag' },
     { fromLevel: 5, pattern: 'swoop' },
   ],
@@ -169,9 +174,9 @@ export const DIFFICULTY = {
     { fromLevel: 3, side: 'left' },
     { fromLevel: 3, side: 'right' },
   ],
-  /** Cada cuánto cambia de dirección (zigzag) */
-  turnIntervalMs: { base: 1400, perLevel: -80, min: 600 },
-  waveAmplitude: { base: 40, perLevel: 6, max: 90 },
+  /** Cada cuánto cambia de dirección (zigzag): nivel 50 → 420 ms */
+  turnIntervalMs: { base: 1400, perLevel: -20, min: 420 },
+  waveAmplitude: { base: 40, perLevel: 1.8, max: 130 },
 } as const;
 
 export type FlightPattern = (typeof DIFFICULTY.patterns)[number]['pattern'];

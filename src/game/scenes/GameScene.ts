@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { COLORS, CREDITS, DEPTH, FRIENDS, GAME_WIDTH, INPUT, PLAYER, RAID, SCORING, SOUNDTRACK, TIMING } from '../config/settings';
+import { COLORS, CREDITS, DEPTH, FRIENDS, GAME_WIDTH, INPUT, PLAYER, RAID, SCORING, TIMING, VICTORY } from '../config/settings';
 import { getServices, type GameServices } from '../config/services';
 import { LoveInterlude } from '../cutscenes/LoveInterlude';
 import { SerforRaid } from '../cutscenes/SerforRaid';
@@ -55,9 +55,6 @@ export class GameScene extends Phaser.Scene {
   private reloadingUntil = 0;
   private touchMode = false;
   private fleeScheduled = false;
-  /** Tiempo de partida (se detiene en pausa); respaldo si el audio no suena */
-  private elapsedMs = 0;
-  private shownSeconds = -1;
 
   constructor() {
     super(SCENES.game);
@@ -69,8 +66,6 @@ export class GameScene extends Phaser.Scene {
     this.phase = 'intro';
     this.level = 1;
     this.lives = PLAYER.lives;
-    this.elapsedMs = 0;
-    this.shownSeconds = -1;
     this.score = new ScoreSystem();
 
     this.background = new Background(this);
@@ -101,9 +96,7 @@ export class GameScene extends Phaser.Scene {
     this.hud.setAmmo(0, 0);
 
     this.bindInput();
-    // La canción es el reloj de la partida: cuando termina, llega SERFOR
-    this.services.audio.startSoundtrack(() => this.onSongEnded());
-    this.updateClock();
+    this.services.audio.startSoundtrack();
     this.showCredits();
     this.services.bridge.emit('game:start');
     this.startLevel(1);
@@ -111,11 +104,6 @@ export class GameScene extends Phaser.Scene {
 
   update(_time: number, delta: number): void {
     this.background.update(delta);
-    // El reloj se congela durante la escena de amor (la canción está en pausa)
-    if (this.phase !== 'gameover' && this.phase !== 'love') {
-      this.elapsedMs += delta;
-      this.updateClock();
-    }
     if (!this.touchMode && this.phase === 'flight') {
       const { x, y } = this.crosshair;
       this.crosshair.setLocked(this.spawner.hittable.some((v) => v.hitTest(x, y, 0, INPUT.headRadius) !== null));
@@ -135,7 +123,8 @@ export class GameScene extends Phaser.Scene {
     this.hud.setLevel(level);
     this.hud.setTracker(this.slots);
     this.hunter.setRestPose(HunterPose.IDLE);
-    this.banner.show(`NIVEL ${level}`, level === 1 ? '¡A CAZAR GALLINAZOS!' : '¡MÁS RÁPIDOS!', TIMING.levelBannerMs);
+    const subtitle = level === 1 ? '¡A CAZAR GALLINAZOS!' : level === VICTORY.levels ? '¡ÚLTIMO NIVEL!' : '¡MÁS RÁPIDOS!';
+    this.banner.show(`NIVEL ${level}/${VICTORY.levels}`, subtitle, TIMING.levelBannerMs);
     if (level > 1) this.services.audio.play('levelup');
     this.time.delayedCall(TIMING.levelBannerMs, () => this.startFlight());
   }
@@ -172,6 +161,11 @@ export class GameScene extends Phaser.Scene {
     if (perfect) {
       this.score.addBonus(SCORING.perfectLevelBonus);
       this.refreshScore();
+    }
+    // Superó el último nivel: ganó (y llega SERFOR igual)
+    if (this.level >= VICTORY.levels) {
+      this.endGame(true);
+      return;
     }
     if (perfect) {
       this.banner.show('¡PERFECTO!', `BONUS +${SCORING.perfectLevelBonus}`, TIMING.levelBannerMs);
@@ -211,7 +205,7 @@ export class GameScene extends Phaser.Scene {
     this.services.audio.play(won ? 'levelup' : 'gameover');
     if (won) this.friends.cheer(RAID.bannerMs + 1500);
     else this.friends.sad(RAID.bannerMs + 1500);
-    if (won) this.banner.show('¡GANASTE!', '¡AGUANTASTE TODA LA CANCIÓN!', RAID.bannerMs);
+    if (won) this.banner.show('¡GANASTE!', `¡SUPERASTE LOS ${VICTORY.levels} NIVELES!`, RAID.bannerMs);
     else this.banner.show('¡PERDISTE!', 'TE QUEDASTE SIN VIDAS', RAID.bannerMs, COLORS.redText);
 
     const isNewRecord = this.score.isNewRecord;
@@ -220,27 +214,6 @@ export class GameScene extends Phaser.Scene {
     this.services.bridge.emit('game:over', result);
     const data: GameOverData = { result, record: this.score.record, isNewRecord };
     new SerforRaid(this, this.hunter, this.dog, this.services.audio).play(() => this.scene.start(SCENES.gameOver, data));
-  }
-
-  /** Terminó la canción: si sigue vivo, ganó. */
-  private onSongEnded(): void {
-    if (this.phase === 'gameover') return;
-    this.endGame(this.lives > 0);
-  }
-
-  /** Cuenta regresiva del HUD según la posición real de la canción. */
-  private updateClock(): void {
-    const { audio } = this.services;
-    const duration = audio.soundtrackDurationMs;
-    const position = audio.soundtrackPositionMs;
-    const remaining = Math.max(0, duration - (position ?? this.elapsedMs));
-    const seconds = Math.ceil(remaining / 1000);
-    if (seconds !== this.shownSeconds) {
-      this.shownSeconds = seconds;
-      this.hud.setTime(seconds);
-    }
-    // Respaldo: si el audio no pudo reproducirse, termina por tiempo
-    if (position === null && this.elapsedMs >= duration + SOUNDTRACK.fallbackGraceMs) this.onSongEnded();
   }
 
   private showCredits(): void {

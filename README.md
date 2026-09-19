@@ -42,11 +42,25 @@ por rectángulo, elimina el fondo (negro o cielo), añade contorno, empaqueta la
 frames uniformes (`generateFrameNumbers`) y genera `src/game/config/assetManifest.ts` con hitboxes y la
 posición de la cabeza del gallinazo (para headshots). Los PNG resultantes están en `public/assets/sprites`.
 
-## Soundtrack y reloj de la partida
+## Soundtrack
 
-La partida suena con `public/assets/audio/soundtrack.mp3` (**música: piurano27** —
+La partida suena en bucle con `public/assets/audio/soundtrack.mp3` (**música: piurano27** —
 [video del gallinazo](https://www.youtube.com/watch?v=7fsMy1FpgsI)). Se reproduce en streaming con un `<audio>`,
-en paralelo a los efectos. La canción es el reloj: el HUD muestra el TIEMPO restante y, cuando termina, se acaba la partida.
+en paralelo a los efectos.
+
+## Niveles
+
+Hay **50 niveles** (`VICTORY.levels`), cada uno más difícil (`DIFFICULTY` en settings.ts):
+
+| Nivel | Velocidad | Tiempo para disparar | Gallinazos a la vez | Disparos |
+|------:|----------:|---------------------:|--------------------:|---------:|
+| 1     | 150 px/s  | 7.0 s                | 1                   | 3        |
+| 12    | 234 px/s  | 6.0 s                | 3                   | 5        |
+| 30    | 370 px/s  | 4.4 s                | 4                   | 6        |
+| 50    | 520 px/s  | 2.6 s                | 4                   | 6        |
+
+Además los giros en zigzag son cada vez más bruscos y las trayectorias fáciles dejan de salir
+(la recta desde el nivel 21, la ondulada desde el 39).
 
 ## Personajes
 
@@ -63,7 +77,7 @@ se congela durante la escena. En el final con SERFOR, la chica aparece llorando 
 
 ## Final: llega SERFOR
 
-Al terminar la partida — **gana** (llega vivo al final de la canción) o **pierde** (sin vidas) —
+Al terminar la partida — **gana** (supera el nivel 50) o **pierde** (sin vidas) —
 suena la sirena, llega la camioneta de SERFOR, bajan dos agentes y detienen al cazador
 ("¡ALTO! ¡MANOS ARRIBA!"). Luego aparece "¡GANASTE!" o "GAME OVER". Tiempos en `RAID` (settings.ts);
 la escena está en `src/game/cutscenes/SerforRaid.ts`. Los sprites salen de `imgs/serfor.png`.
@@ -82,10 +96,24 @@ y poner la ruta en `AUDIO_FILES` (`src/game/systems/AudioSystem.ts`).
 
 ## Ranking / Supabase
 
-Sin configuración, el ranking se guarda en el navegador. Para el ranking online:
+Nombres de hasta **12 caracteres** (letras, Ñ, números y espacios). Sin configuración, el ranking se guarda
+en el navegador (solo ese dispositivo). Para el ranking online compartido con Supabase (gratis):
 
-1. Ejecutar `supabase/schema.sql` en el SQL Editor de Supabase.
-2. Definir `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` (ver `.env.example`, y en Vercel → Environment Variables).
+1. Crear una cuenta y un proyecto en <https://supabase.com> (plan Free).
+2. En el proyecto: **SQL Editor → New query**, pegar todo `supabase/schema.sql` y pulsar **Run**
+   (se puede volver a ejecutar sin problemas).
+3. En **Project Settings → API** copiar la **Project URL** y la clave **anon public**.
+4. Crear el archivo `.env.local` en la raíz del proyecto:
+
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxx.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...
+   ```
+
+5. Reiniciar `npm run dev`. La pantalla de ranking mostrará **RANKING ONLINE**.
+6. En Vercel: **Settings → Environment Variables**, añadir las mismas dos variables y volver a desplegar.
+
+La clave *anon* es pública por diseño; la seguridad la dan las políticas RLS del esquema.
 
 El juego envía la puntuación **una sola vez**, al terminar la partida. Los rankings admiten filtro por periodo
 (total / semana / hoy), evento y temporada.

@@ -31,6 +31,10 @@ export function buildGameConfig(parent: HTMLElement): Phaser.Types.Core.GameConf
     input: {
       activePointers: 2,
     },
+    // Necesario para el campo de nombre (<input> real sobre el canvas)
+    dom: {
+      createContainer: true,
+    },
     fps: { target: 60 },
     scene: [BootScene, PreloadScene, MenuScene, HowToPlayScene, RankingScene, GameScene, PauseScene, GameOverScene],
   };
