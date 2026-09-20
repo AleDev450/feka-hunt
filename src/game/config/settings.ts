@@ -106,16 +106,14 @@ export const LOVE = {
 
 /**
  * Escena de los niveles PARES: los amigos se ponen en modo disco mientras
- * suena "ronchas". Dura lo que dura el audio (12.7 s); para acortarla, bajar
- * `maxMs`.
+ * suena "ronchas". Ronchas baila durante toda la duración del audio.
  */
 export const DISCO = {
   src: '/assets/audio/ronchas.mp3',
   durationMs: 12_700,
-  /** Tope de duración de la escena (el audio se desvanece al final) */
-  maxMs: 12_700,
   volume: 0.9,
-  text: '¡RONCHAS!',
+  text: '¡RONCHAS VIOLIN!',
+  dancer: { x: 760, y: 605 },
   /** Cada cuánto cambian las luces y las poses */
   lightMs: 180,
   colors: [0xff3b7f, 0x3bd6ff, 0xffd93b, 0x7cff3b, 0xb43bff],

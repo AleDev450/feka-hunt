@@ -4,6 +4,85 @@
 export const ASSET_BASE_PATH = '/assets/sprites/';
 
 export const SPRITE_SHEETS = {
+  "ronchas": {
+    "file": "ronchas.png",
+    "frameWidth": 158,
+    "frameHeight": 198,
+    "frames": {
+      "dance1": {
+        "index": 0,
+        "body": {
+          "x": 9,
+          "y": 10,
+          "w": 140,
+          "h": 187
+        }
+      },
+      "dance2": {
+        "index": 1,
+        "body": {
+          "x": 11,
+          "y": 13,
+          "w": 135,
+          "h": 184
+        }
+      },
+      "dance3": {
+        "index": 2,
+        "body": {
+          "x": 1,
+          "y": 1,
+          "w": 156,
+          "h": 196
+        }
+      },
+      "dance4": {
+        "index": 3,
+        "body": {
+          "x": 1,
+          "y": 10,
+          "w": 155,
+          "h": 187
+        }
+      },
+      "dance5": {
+        "index": 4,
+        "body": {
+          "x": 6,
+          "y": 16,
+          "w": 146,
+          "h": 181
+        }
+      },
+      "dance6": {
+        "index": 5,
+        "body": {
+          "x": 1,
+          "y": 5,
+          "w": 156,
+          "h": 192
+        }
+      },
+      "dance7": {
+        "index": 6,
+        "body": {
+          "x": 1,
+          "y": 17,
+          "w": 156,
+          "h": 180
+        }
+      },
+      "dance8": {
+        "index": 7,
+        "body": {
+          "x": 2,
+          "y": 11,
+          "w": 154,
+          "h": 186
+        }
+      }
+    }
+  },
   "hunter": {
     "file": "hunter.png",
     "frameWidth": 164,

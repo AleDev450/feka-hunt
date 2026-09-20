@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { ANIM } from '../config/animations';
 import { COLORS, DEPTH, DISCO, FRIENDS, GAME_HEIGHT, GAME_WIDTH } from '../config/settings';
 import type { FriendsGroup } from '../entities/FriendsGroup';
 import type { Jacinto } from '../entities/Jacinto';
@@ -18,6 +19,19 @@ export class DiscoInterlude {
 
   play(durationMs: number, onDone: () => void): void {
     const s = this.scene;
+
+    const ronchas = s.add.sprite(DISCO.dancer.x, DISCO.dancer.y, 'ronchas')
+      .setOrigin(0.5, 1)
+      .setDepth(DEPTH.mascot)
+      .play(ANIM.ronchasDance);
+    s.tweens.add({
+      targets: ronchas,
+      y: DISCO.dancer.y - 12,
+      duration: 250,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
 
     // Luces de colores sobre toda la escena
     const lights = s.add
@@ -60,7 +74,10 @@ export class DiscoInterlude {
     });
     s.time.delayedCall(durationMs, () => {
       timer.remove();
-      [title, lights, ball, glow, rope].forEach((o) => o.destroy());
+      [ronchas, title, lights, ball, glow, rope].forEach((o) => {
+        s.tweens.killTweensOf(o);
+        o.destroy();
+      });
       onDone();
     });
   }

@@ -36,6 +36,7 @@ export const vultureFrame = (type: VultureType, pose: VulturePose): number =>
 export const vultureFlyAnim = (type: VultureType): string => `vulture-fly-${type}`;
 
 export const ANIM = {
+  ronchasDance: 'ronchas-dance',
   jacintoIdle: 'jacinto-idle',
   jacintoRun: 'jacinto-run',
   jacintoHit: 'jacinto-hit',
@@ -47,6 +48,13 @@ export const ANIM = {
 export function registerAnimations(scene: Phaser.Scene): void {
   const { anims } = scene;
   if (anims.exists(ANIM.jacintoIdle)) return;
+
+  anims.create({
+    key: ANIM.ronchasDance,
+    frames: anims.generateFrameNumbers('ronchas', { start: 0, end: 7 }),
+    frameRate: 8,
+    repeat: -1,
+  });
 
   // Un aleteo por tipo de gallinazo
   for (const type of VULTURE_TYPES) {

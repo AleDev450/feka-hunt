@@ -40,6 +40,16 @@ const OUTLINE = [22, 12, 24]; // contorno oscuro para dar contraste sobre el cie
 /** Tiras de animación (spritesheets uniformes) */
 const SHEETS = [
   {
+    key: 'ronchas',
+    source: 'ronchas',
+    scale: 0.4,
+    anchor: 'bottom',
+    components: false,
+    frames: Object.fromEntries(Array.from({ length: 8 }, (_, i) => [
+      `dance${i + 1}`, [(i % 4) * 384, Math.floor(i / 4) * 512, 384, 512],
+    ])),
+  },
+  {
     key: 'hunter',
     source: 'hunter',
     scale: 0.7,
@@ -322,6 +332,13 @@ const SOURCES = {
   },
   jacinto: {
     file: JACINTO_SOURCE,
+    useAlpha: true,
+    bg: () => false,
+    fg: () => true,
+    hole: () => false,
+  },
+  ronchas: {
+    file: join(ROOT, 'imgs', 'ronchas.png'),
     useAlpha: true,
     bg: () => false,
     fg: () => true,

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { COLORS, CREDITS, DEPTH, DISCO, FRIENDS, GAME_WIDTH, INPUT, PLAYER, RAID, SCORING, TIMING, VICTORY } from '../config/settings';
+import { COLORS, CREDITS, DEPTH, FRIENDS, GAME_WIDTH, INPUT, PLAYER, RAID, SCORING, TIMING, VICTORY } from '../config/settings';
 import { getServices, type GameServices } from '../config/services';
 import { DiscoInterlude } from '../cutscenes/DiscoInterlude';
 import { LoveInterlude } from '../cutscenes/LoveInterlude';
@@ -199,7 +199,7 @@ export class GameScene extends Phaser.Scene {
     };
 
     if (this.level % 2 === 0) {
-      const durationMs = Math.min(audio.playClip('disco'), DISCO.maxMs);
+      const durationMs = audio.playClip('disco');
       new DiscoInterlude(this, this.friends, this.mascot).play(durationMs, () => {
         audio.fadeOutClip('disco');
         done();
