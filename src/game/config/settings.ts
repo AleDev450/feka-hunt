@@ -19,6 +19,7 @@ export const WORLD = {
   /** Punto de aparición desde abajo (detrás del pasto) */
   riseY: 640,
   hunter: { x: 150, y: 710 },
+  hut: { x: 1145, y: 628, roofOffsetY: 12 },
 } as const;
 
 /** Pequeño Jacinto, la mascota (imgs/pequeno_jancito.png) */
@@ -192,35 +193,35 @@ export const DIFFICULTY = {
    * Rampas `start` → `end` (nivel 1 → nivel 50) con curva: `curve` > 1 hace
    * que los primeros niveles suban poquito y el salto gordo quede al final.
    */
-  speed: { start: 150, end: 520, curve: 1.4, jitter: 0.15 },
-  /** Tiempo para disparar: 7 s en el nivel 1 → 2.6 s en el 50 */
-  flyTimeMs: { start: 7000, end: 2600, curve: 1.4 },
+  speed: { start: 170, end: 650, curve: 0.9, jitter: 0.15 },
+  /** Tiempo para disparar: 6.5 s en el nivel 1 → 2.2 s en el 50 */
+  flyTimeMs: { start: 6500, end: 2200, curve: 0.9 },
   /** Frecuencia del aleteo (fps de la animación) */
   flapFps: { start: 9, end: 18, curve: 1.3 },
   /** A partir de qué nivel vuelan N gallinazos a la vez */
   simultaneous: [
     { fromLevel: 1, count: 1 },
-    { fromLevel: 6, count: 2 },
-    { fromLevel: 18, count: 3 },
-    { fromLevel: 34, count: 4 },
+    { fromLevel: 4, count: 2 },
+    { fromLevel: 12, count: 3 },
+    { fromLevel: 24, count: 4 },
   ],
   /** Disparos por tanda = base + extra por gallinazo adicional (tope: magazineSize) */
   shots: { base: 3, perExtraVulture: 1 },
   /** Trayectorias disponibles; las fáciles dejan de salir en niveles altos */
   patterns: [
-    { fromLevel: 1, toLevel: 24, pattern: 'straight' },
-    { fromLevel: 4, toLevel: 40, pattern: 'wave' },
-    { fromLevel: 7, pattern: 'zigzag' },
-    { fromLevel: 12, pattern: 'swoop' },
+    { fromLevel: 1, toLevel: 16, pattern: 'straight' },
+    { fromLevel: 3, toLevel: 32, pattern: 'wave' },
+    { fromLevel: 5, pattern: 'zigzag' },
+    { fromLevel: 9, pattern: 'swoop' },
   ],
   spawnSides: [
     { fromLevel: 1, side: 'bottom' },
-    { fromLevel: 8, side: 'left' },
-    { fromLevel: 8, side: 'right' },
+    { fromLevel: 6, side: 'left' },
+    { fromLevel: 6, side: 'right' },
   ],
-  /** Cada cuánto cambia de dirección (zigzag): nivel 50 → 420 ms */
-  turnIntervalMs: { start: 1400, end: 420, curve: 1.3 },
-  waveAmplitude: { start: 40, end: 130, curve: 1.3 },
+  /** Cada cuánto cambia de dirección (zigzag): nivel 50 → 340 ms */
+  turnIntervalMs: { start: 1300, end: 340, curve: 0.9 },
+  waveAmplitude: { start: 40, end: 150, curve: 1 },
 } as const;
 
 export type FlightPattern = (typeof DIFFICULTY.patterns)[number]['pattern'];

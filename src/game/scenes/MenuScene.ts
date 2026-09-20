@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { IMAGES } from '../config/assetManifest';
 import { VULTURE_TYPES, vultureFlyAnim } from '../config/animations';
 import { COLORS, CREDITS, DEPTH, GAME_WIDTH, WORLD } from '../config/settings';
 import { getServices } from '../config/services';
@@ -31,7 +32,8 @@ export class MenuScene extends Phaser.Scene {
     new Hunter(this);
     new Jacinto(this, audio);
     new FriendsGroup(this);
-    this.add.image(1090, WORLD.grassTopY + 12, 'vulturePerched').setOrigin(0.5, 1).setDepth(DEPTH.midground + 1);
+    this.add.image(WORLD.hut.x, WORLD.hut.y - IMAGES.hut.height + WORLD.hut.roofOffsetY, 'vulturePerched')
+      .setOrigin(0.5, 1).setDepth(DEPTH.midground + 1);
 
     // Gallinazos decorativos cruzando el cielo
     this.flyers = [0, 1].map((i) => {

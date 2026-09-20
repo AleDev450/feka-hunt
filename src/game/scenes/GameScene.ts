@@ -245,7 +245,7 @@ export class GameScene extends Phaser.Scene {
     this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
       if (p.wasTouch) return;
       this.crosshair.moveTo(p.x, p.y);
-      this.hunter.faceTowards(p.x);
+      this.hunter.faceTowards(p.x, p.y);
     });
     this.input.on('pointerdown', (p: Phaser.Input.Pointer, over: Phaser.GameObjects.GameObject[]) => {
       this.services.audio.unlock();
@@ -279,7 +279,7 @@ export class GameScene extends Phaser.Scene {
   private shoot(x: number, y: number, touch: boolean): void {
     if (this.phase === 'gameover') return;
     this.crosshair.moveTo(x, y);
-    this.hunter.faceTowards(x);
+    this.hunter.faceTowards(x, y);
     if (this.phase !== 'flight') return;
 
     const now = this.time.now;

@@ -45,7 +45,7 @@ export class Background {
     scene.add.image(780, WORLD.grassTopY + 18, 'lake').setOrigin(0.5, 1).setScale(2, 1).setDepth(DEPTH.midground);
     scene.add.image(60, WORLD.grassTopY + 20, 'tree').setOrigin(0.5, 1).setDepth(DEPTH.midground);
     // Choza a la derecha (antes había un árbol)
-    scene.add.image(1145, WORLD.grassTopY + 22, 'hut').setOrigin(0.5, 1).setDepth(DEPTH.midground);
+    scene.add.image(WORLD.hut.x, WORLD.hut.y, 'hut').setOrigin(0.5, 1).setDepth(DEPTH.midground);
     scene.add.image(560, WORLD.grassTopY + 10, 'fence').setOrigin(0.5, 1).setDepth(DEPTH.midground);
     scene.add.image(470, WORLD.grassTopY + 8, 'sign').setOrigin(0.5, 1).setDepth(DEPTH.midground);
 
