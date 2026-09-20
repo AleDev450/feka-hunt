@@ -51,8 +51,10 @@ export function registerAnimations(scene: Phaser.Scene): void {
 
   anims.create({
     key: ANIM.ronchasDance,
-    frames: anims.generateFrameNumbers('ronchas', { start: 0, end: 7 }),
-    frameRate: 8,
+    // Las cuatro poses superiores conservan el violín en el mismo lado;
+    // el rebote evita el salto brusco que cruzaba el mango al reiniciar.
+    frames: anims.generateFrameNumbers('ronchas', { frames: [0, 1, 2, 3, 2, 1] }),
+    frameRate: 6,
     repeat: -1,
   });
 

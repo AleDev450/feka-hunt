@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { ANIM, frameIndex } from '../config/animations';
 import { COLORS, DEPTH, MASCOT } from '../config/settings';
-import type { AudioSystem } from '../systems/AudioSystem';
 import { arcadeText } from '../ui/text';
 import { clamp } from '../utils/gameUtils';
 
@@ -23,14 +22,11 @@ export class Jacinto extends Phaser.GameObjects.Sprite {
   jacintoState: JacintoState = JacintoState.IDLE;
   private readonly shout: Phaser.GameObjects.Text;
 
-  constructor(
-    scene: Phaser.Scene,
-    private readonly audio: AudioSystem | null,
-  ) {
+  constructor(scene: Phaser.Scene) {
     super(scene, MASCOT.homeX, MASCOT.y, 'jacinto', frameIndex('jacinto', 'idle1'));
     this.setOrigin(0.5, 1).setDepth(DEPTH.mascot);
     scene.add.existing(this);
-    this.shout = arcadeText(scene, MASCOT.homeX, MASCOT.y - this.height - 12, MASCOT.hitPhrase, 14, {
+    this.shout = arcadeText(scene, MASCOT.homeX, MASCOT.y - this.height - 12, MASCOT.hitPhrase, 22, {
       color: COLORS.goldText,
     })
       .setDepth(DEPTH.mascot + 1)
@@ -88,7 +84,6 @@ export class Jacinto extends Phaser.GameObjects.Sprite {
     this.cancel();
     this.jacintoState = JacintoState.RECIBIENDO;
     this.play(ANIM.jacintoHit);
-    this.audio?.play('awa');
     this.say(durationMs);
     // Saltito hacia atrás por el golpe
     this.scene.tweens.add({

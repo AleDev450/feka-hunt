@@ -48,7 +48,8 @@ export const AUDIO_FILES: Record<SfxKey | LoopKey, string | null> = {
   levelup: null,
   extraLife: null,
   /** Queja de Jacinto cuando el jugador falla */
-  awa: '/assets/audio/awa.mp3',
+  // Desactivado temporalmente; el archivo se conserva para reactivarlo luego.
+  awa: null,
   gameover: null,
   siren: null,
 };

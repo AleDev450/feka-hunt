@@ -111,7 +111,8 @@ export const LOVE = {
  */
 export const DISCO = {
   src: '/assets/audio/ronchas.mp3',
-  durationMs: 12_700,
+  durationMs: 3_000,
+  maxMs: 3_000,
   volume: 0.9,
   text: '¡RONCHAS VIOLIN!',
   dancer: { x: 760, y: 605 },
