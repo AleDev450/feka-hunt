@@ -4,6 +4,103 @@
 export const ASSET_BASE_PATH = '/assets/sprites/';
 
 export const SPRITE_SHEETS = {
+  "hunterAim": {
+    "file": "hunterAim.png",
+    "frameWidth": 142,
+    "frameHeight": 155,
+    "frames": {
+      "aim1": {
+        "index": 0,
+        "body": {
+          "x": 12,
+          "y": 1,
+          "w": 117,
+          "h": 153
+        }
+      },
+      "aim2": {
+        "index": 1,
+        "body": {
+          "x": 6,
+          "y": 26,
+          "w": 130,
+          "h": 128
+        }
+      },
+      "aim3": {
+        "index": 2,
+        "body": {
+          "x": 4,
+          "y": 29,
+          "w": 133,
+          "h": 125
+        }
+      },
+      "aim4": {
+        "index": 3,
+        "body": {
+          "x": 1,
+          "y": 29,
+          "w": 140,
+          "h": 125
+        }
+      },
+      "aim5": {
+        "index": 4,
+        "body": {
+          "x": 10,
+          "y": 29,
+          "w": 121,
+          "h": 125
+        }
+      },
+      "aim6": {
+        "index": 5,
+        "body": {
+          "x": 15,
+          "y": 5,
+          "w": 112,
+          "h": 149
+        }
+      },
+      "aim7": {
+        "index": 6,
+        "body": {
+          "x": 9,
+          "y": 26,
+          "w": 123,
+          "h": 128
+        }
+      },
+      "aim8": {
+        "index": 7,
+        "body": {
+          "x": 4,
+          "y": 30,
+          "w": 133,
+          "h": 124
+        }
+      },
+      "aim9": {
+        "index": 8,
+        "body": {
+          "x": 1,
+          "y": 30,
+          "w": 140,
+          "h": 124
+        }
+      },
+      "aim10": {
+        "index": 9,
+        "body": {
+          "x": 10,
+          "y": 30,
+          "w": 122,
+          "h": 124
+        }
+      }
+    }
+  },
   "ronchas": {
     "file": "ronchas.png",
     "frameWidth": 158,

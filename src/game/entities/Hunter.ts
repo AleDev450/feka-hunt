@@ -1,6 +1,4 @@
 import Phaser from 'phaser';
-import { frameIndex } from '../config/animations';
-import { SPRITE_SHEETS } from '../config/assetManifest';
 import { COLORS, DEPTH, WORLD } from '../config/settings';
 import { TEX } from '../ui/proceduralTextures';
 
@@ -15,35 +13,24 @@ export enum HunterPose {
 }
 
 /** Punta del cañón relativa a los pies (origen 0.5, 1) en el frame "apuntando" */
-const MUZZLE = { x: 77, y: -114 };
-const WAIST_Y = 141;
-const { frameWidth: FRAME_W, frameHeight: FRAME_H } = SPRITE_SHEETS.hunter;
+const MUZZLE = { x: 63, y: -105 };
 
 /**
- * El cazador conserva el frame "apuntando", dividido en piernas y torso.
- * El torso gira con la mira y las piernas mantienen los pies sobre el suelo.
- * Retroceso, fogonazo, daño y saltos se aplican a ambas partes.
+ * El cazador usa diez poses completas del nuevo spritesheet. Cada pose cubre
+ * una altura de la mira y cada lado, así el personaje nunca se corta al apuntar.
  */
 export class Hunter extends Phaser.GameObjects.Sprite {
   pose: HunterPose = HunterPose.IDLE;
   private readonly muzzleFlash: Phaser.GameObjects.Image;
-  private readonly upperBody: Phaser.GameObjects.Sprite;
   private aimX = WORLD.hunter.x + 500;
   private aimY = WORLD.hunter.y + MUZZLE.y;
 
   constructor(scene: Phaser.Scene) {
-    super(scene, WORLD.hunter.x, WORLD.hunter.y, 'hunter', frameIndex('hunter', 'aim'));
+    super(scene, WORLD.hunter.x, WORLD.hunter.y, 'hunterAim', 2);
     this.setOrigin(0.5, 1).setDepth(DEPTH.hunter);
     scene.add.existing(this);
-    this.setCrop(0, WAIST_Y, FRAME_W, FRAME_H - WAIST_Y);
-    this.upperBody = scene.add.sprite(this.x, this.y, 'hunter', frameIndex('hunter', 'aim'))
-      .setOrigin(0.5, WAIST_Y / FRAME_H)
-      .setCrop(0, 0, FRAME_W, WAIST_Y)
-      .setDepth(DEPTH.hunter + 0.01);
     this.muzzleFlash = scene.add.image(0, 0, TEX.spark).setDepth(DEPTH.hunter + 0.1).setVisible(false);
-    this.syncAim();
     this.once(Phaser.GameObjects.Events.DESTROY, () => {
-      this.upperBody.destroy();
       this.muzzleFlash.destroy();
     });
   }
@@ -53,25 +40,18 @@ export class Hunter extends Phaser.GameObjects.Sprite {
     if (this.pose === HunterPose.DETENIDO) return;
     this.aimX = x;
     this.aimY = y;
-    this.setFlipX(x < this.x);
-    this.syncAim();
+    this.setFlipX(false);
+    this.setFrame(this.aimFrame(x < this.x, y));
   }
 
   preUpdate(time: number, delta: number): void {
     super.preUpdate(time, delta);
-    this.syncAim();
   }
 
-  private syncAim(): void {
-    const pivotY = this.y - (FRAME_H - WAIST_Y);
-    const dx = Math.abs(this.aimX - this.x);
-    const dy = this.aimY - pivotY;
-    const muzzleY = MUZZLE.y + FRAME_H - WAIST_Y;
-    const distance = Math.max(Math.hypot(dx, dy), Math.abs(muzzleY) + 1);
-    const angle = Math.atan2(dy, dx) - Math.asin(muzzleY / distance);
-    this.upperBody.setPosition(this.x, pivotY).setFlipX(this.flipX)
-      .setRotation(this.pose === HunterPose.DETENIDO ? 0 : angle * (this.flipX ? -1 : 1))
-      .setTint(this.tintTopLeft).setAlpha(this.alpha).setVisible(this.visible);
+  private aimFrame(left: boolean, y: number): number {
+    const row = left ? 5 : 0;
+    const column = y < 180 ? 0 : y < 300 ? 1 : y < 430 ? 2 : y < 560 ? 3 : 4;
+    return row + column;
   }
 
   setRestPose(pose: HunterPose): void {
@@ -80,13 +60,9 @@ export class Hunter extends Phaser.GameObjects.Sprite {
 
   shoot(): void {
     this.pose = HunterPose.DISPARANDO;
-    const dir = this.flipX ? -1 : 1;
-    this.syncAim();
-    const muzzle = this.upperBody.getWorldTransformMatrix().transformPoint(
-      (MUZZLE.x + 10) * dir, MUZZLE.y + FRAME_H - WAIST_Y,
-    );
+    const dir = this.aimX < this.x ? -1 : 1;
     this.muzzleFlash
-      .setPosition(muzzle.x, muzzle.y)
+      .setPosition(this.x + MUZZLE.x * dir, this.y + MUZZLE.y)
       .setScale(0.7)
       .setAlpha(1)
       .setVisible(true);
@@ -124,7 +100,6 @@ export class Hunter extends Phaser.GameObjects.Sprite {
     this.scene.tweens.killTweensOf(this);
     this.setPosition(WORLD.hunter.x, WORLD.hunter.y).setFlipX(false);
     this.setTint(0xb8b8c8);
-    this.syncAim();
   }
 
   /** Movimiento corto de ida y vuelta a la posición base. */

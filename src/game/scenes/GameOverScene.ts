@@ -78,6 +78,12 @@ export class GameOverScene extends Phaser.Scene {
     const { audio } = getServices(this);
     if (GAME_OVER_SONG.onlyOnDefeat && this.data_.result.won) return;
     const timer = this.time.delayedCall(GAME_OVER_SONG.delayMs, () => audio.playClip('gameOver'));
+    const startOnTyping = () => {
+      timer.remove();
+      audio.playClip('gameOver');
+    };
+    this.input.keyboard?.once('keydown', startOnTyping);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.input.keyboard?.off('keydown', startOnTyping));
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       timer.remove();
       audio.fadeOutClip('gameOver', 500);

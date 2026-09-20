@@ -127,7 +127,7 @@ export const DISCO = {
 export const GAME_OVER_SONG = {
   src: '/assets/audio/shalala.mp3',
   durationMs: 18_400,
-  delayMs: 5000,
+  delayMs: 1000,
   volume: 0.7,
   /** Solo al perder (ponlo en false para que suene también al ganar) */
   onlyOnDefeat: true,

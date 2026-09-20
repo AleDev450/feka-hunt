@@ -22,6 +22,7 @@ const FRIENDS_SOURCE = join(ROOT, 'imgs', 'grupo_amigos_3.png');
 const FRIENDS_TILE = [54, 53, 71];
 const GIRL_SOURCE = join(ROOT, 'imgs', 'mujer.png');
 const HUNTER_SOURCE = join(ROOT, 'imgs', 'nuevo_personaje.png');
+const HUNTER_AIM_SOURCE = join(ROOT, 'imgs', 'nuevo_personaje_2.png');
 const HUT_SOURCE = join(ROOT, 'imgs', 'choza_para_background.png');
 const VULTURES_SOURCE = join(ROOT, 'imgs', 'gallinazos.png');
 const JACINTO_SOURCE = join(ROOT, 'imgs', 'pequeno_jancito.png');
@@ -39,6 +40,16 @@ const OUTLINE = [22, 12, 24]; // contorno oscuro para dar contraste sobre el cie
 
 /** Tiras de animación (spritesheets uniformes) */
 const SHEETS = [
+  {
+    key: 'hunterAim',
+    source: 'hunterAim',
+    scale: 0.42,
+    anchor: 'bottom',
+    components: false,
+    frames: Object.fromEntries(Array.from({ length: 10 }, (_, i) => [
+      `aim${i + 1}`, [(i % 5) * 396, Math.floor(i / 5) * 396, 396, 396],
+    ])),
+  },
   {
     key: 'ronchas',
     source: 'ronchas',
@@ -300,6 +311,13 @@ const SOURCES = {
     bg: (r, g, b) => Math.max(r, g, b) <= BLACK_THRESHOLD,
     fg: (r, g, b) => Math.max(r, g, b) > FG_THRESHOLD,
     hole: (r, g, b) => Math.max(r, g, b) <= 6,
+  },
+  hunterAim: {
+    file: HUNTER_AIM_SOURCE,
+    useAlpha: true,
+    bg: () => false,
+    fg: () => true,
+    hole: () => false,
   },
   vultures: {
     file: VULTURES_SOURCE,
