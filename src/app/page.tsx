@@ -4,29 +4,22 @@ import { CREDITS } from '@/game/config/settings';
 export default function HomePage() {
   return (
     <main className="landing">
-      <img className="landing__logo" src="/assets/sprites/logo.png" alt="Gallinazo Hunt" width={438} height={168} />
-      <p className="landing__tagline">
-        UN ARCADE PERUANO DE GALLINAZOS.
-        <br />
-        APUNTA, DISPARA Y CONSIGUE EL RECORD.
-      </p>
-      <Link className="landing__cta" href="/jugar">
-        ▶ JUGAR
-      </Link>
-      <div className="landing__cast" aria-hidden>
-        <img src="/assets/sprites/vulturePerched.png" alt="" width={99} height={177} />
-      </div>
-      <p className="landing__credits">
-        SOUNDTRACK: {CREDITS.artist} ·{' '}
-        <a href={CREDITS.videoUrl} target="_blank" rel="noopener noreferrer">
-          VER VIDEO EN YOUTUBE
-        </a>
-      </p>
+      <h1 className="landing__title">LAS AVENTURAS<br />DE LOS FEKAS</h1>
+      <p className="landing__tagline">JUEGOS ARCADE PERUANOS.<br />ELIGE TU AVENTURA.</p>
+      <section className="adventures" aria-label="Juegos disponibles">
+        <Link className="adventure adventure--available" href="/jugar">
+          <img src="/assets/sprites/logo.png" alt="Gallinazo Hunt" />
+          <span className="adventure__name">GALLINAZO HUNT</span>
+          <span className="adventure__action">▶ JUGAR</span>
+        </Link>
+        <div className="adventure adventure--locked" aria-label="Cholo Factos Lima Racing, en desarrollo">
+          <div className="adventure__placeholder">CHOLO<br />FACTOS</div>
+          <span className="adventure__name">CHOLO FACTOS: LIMA RACING</span>
+          <span className="adventure__action">EN DESARROLLO</span>
+        </div>
+      </section>
       <p className="landing__footer">MOUSE O TOUCH · PC · TABLET · MOVIL</p>
-      <div className="landing__author">
-        <span>DESARROLLADO POR</span>
-        <img src="/assets/sprites/kickLogo.png" alt={CREDITS.author} width={113} height={95} />
-      </div>
+      <div className="landing__author"><span>DESARROLLADO POR</span><img src="/assets/sprites/kickLogo.png" alt={CREDITS.author} width={113} height={95} /></div>
     </main>
   );
 }
