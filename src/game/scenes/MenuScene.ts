@@ -69,9 +69,12 @@ export class MenuScene extends Phaser.Scene {
       { width: 640, height: 46, fontSize: 12, color: COLORS.red },
     );
     credit.setDepth(DEPTH.hud);
-    arcadeText(this, GAME_WIDTH / 2, 704, `JUEGO CREADO POR ${CREDITS.author}`, 9, { color: COLORS.white })
+    // Desarrollado por (logo de Kick), en una línea para que entre abajo
+    arcadeText(this, GAME_WIDTH / 2 - 70, 672, 'DESARROLLADO POR', 10, { color: COLORS.white })
       .setDepth(DEPTH.hud)
-      .setAlpha(0.85);
+      .setAlpha(0.9);
+    const kick = this.add.image(GAME_WIDTH / 2 + 78, 672, 'kickLogo').setScale(0.5).setDepth(DEPTH.hud);
+    this.tweens.add({ targets: kick, scale: 1.06, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     this.tweens.add({ targets: credit, scale: 1.04, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
   }
 

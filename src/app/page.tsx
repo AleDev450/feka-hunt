@@ -22,11 +22,11 @@ export default function HomePage() {
           VER VIDEO EN YOUTUBE
         </a>
       </p>
-      <p className="landing__footer">
-        MOUSE O TOUCH · PC · TABLET · MOVIL
-        <br />
-        JUEGO CREADO POR {CREDITS.author}
-      </p>
+      <p className="landing__footer">MOUSE O TOUCH · PC · TABLET · MOVIL</p>
+      <div className="landing__author">
+        <span>DESARROLLADO POR</span>
+        <img src="/assets/sprites/kickLogo.png" alt={CREDITS.author} width={113} height={95} />
+      </div>
     </main>
   );
 }

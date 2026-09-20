@@ -1,5 +1,5 @@
 import type Phaser from 'phaser';
-import { LOVE, SOUNDTRACK, STORAGE_KEYS } from '../config/settings';
+import { DISCO, GAME_OVER_SONG, LOVE, SOUNDTRACK, STORAGE_KEYS } from '../config/settings';
 import { storage } from '../utils/gameUtils';
 
 export type SfxKey =
@@ -19,6 +19,16 @@ export type SfxKey =
 
 /** Sonidos en bucle (se inician y detienen explícitamente) */
 export type LoopKey = 'siren';
+
+/** Clips de las escenas entre niveles */
+export type ClipKey = 'love' | 'disco' | 'gameOver';
+
+const CLIPS: Record<ClipKey, { src: string; volume: number; durationMs: number; loop?: boolean }> = {
+  love: { src: LOVE.src, volume: LOVE.volume, durationMs: LOVE.durationMs },
+  disco: { src: DISCO.src, volume: DISCO.volume, durationMs: DISCO.durationMs },
+  // Suena en bucle mientras el jugador escribe su nombre
+  gameOver: { src: GAME_OVER_SONG.src, volume: GAME_OVER_SONG.volume, durationMs: GAME_OVER_SONG.durationMs, loop: true },
+};
 
 /**
  * Archivos de audio reales. Mientras un valor sea null se usa el placeholder
@@ -59,7 +69,7 @@ export class AudioSystem {
   private noiseBuffer: AudioBuffer | null = null;
   private sound: Phaser.Sound.BaseSoundManager | null = null;
   private track: HTMLAudioElement | null = null;
-  private love: HTMLAudioElement | null = null;
+  private clips: Partial<Record<ClipKey, HTMLAudioElement>> = {};
   private trackActive = false;
   private trackPrimed = false;
   private fileSiren: Phaser.Sound.BaseSound | null = null;
@@ -69,11 +79,14 @@ export class AudioSystem {
   constructor() {
     // Empieza a cargar la canción desde el menú para que la partida arranque sin espera
     this.ensureTrack();
-    if (typeof Audio !== 'undefined') {
-      this.love = new Audio(LOVE.src);
-      this.love.preload = 'auto';
-      this.love.volume = LOVE.volume;
-      this.love.muted = this._muted;
+    if (typeof Audio === 'undefined') return;
+    for (const [key, clip] of Object.entries(CLIPS) as [ClipKey, (typeof CLIPS)[ClipKey]][]) {
+      const audio = new Audio(clip.src);
+      audio.preload = 'auto';
+      audio.loop = clip.loop === true;
+      audio.volume = clip.volume;
+      audio.muted = this._muted;
+      this.clips[key] = audio;
     }
   }
 
@@ -100,7 +113,7 @@ export class AudioSystem {
     if (this.master && this.ctx) this.master.gain.setTargetAtTime(muted ? 0 : 1, this.ctx.currentTime, 0.02);
     if (this.sound) this.sound.mute = muted;
     if (this.track) this.track.muted = muted;
-    if (this.love) this.love.muted = muted;
+    Object.values(this.clips).forEach((clip) => { clip.muted = muted; });
   }
 
   toggleMute(): boolean {
@@ -190,22 +203,42 @@ export class AudioSystem {
     this.track.currentTime = 0;
   }
 
-  /** Reproduce "te amo gordo" desde el inicio. Devuelve su duración en ms. */
-  playLoveClip(): number {
-    const love = this.love;
-    if (!love) return LOVE.durationMs;
-    love.currentTime = 0;
-    love.muted = this._muted;
-    love.play().catch(() => undefined);
-    return Number.isFinite(love.duration) && love.duration > 0 ? love.duration * 1000 : LOVE.durationMs;
+  /** Reproduce el clip de una escena desde el inicio. Devuelve su duración en ms. */
+  playClip(key: ClipKey): number {
+    const clip = this.clips[key];
+    if (!clip) return CLIPS[key].durationMs;
+    clip.currentTime = 0;
+    clip.muted = this._muted;
+    clip.play().catch(() => undefined);
+    return Number.isFinite(clip.duration) && clip.duration > 0 ? clip.duration * 1000 : CLIPS[key].durationMs;
   }
 
-  pauseLoveClip(): void {
-    this.love?.pause();
+  /** Desvanece y para el clip (para cortar la escena antes de que acabe). */
+  fadeOutClip(key: ClipKey, ms = 400): void {
+    const clip = this.clips[key];
+    if (!clip || clip.paused) return;
+    const from = clip.volume;
+    const steps = 8;
+    for (let i = 1; i <= steps; i++) {
+      window.setTimeout(() => {
+        clip.volume = Math.max(0, from * (1 - i / steps));
+        if (i === steps) {
+          clip.pause();
+          clip.currentTime = 0;
+          clip.volume = from;
+        }
+      }, (ms / steps) * i);
+    }
   }
 
-  resumeLoveClip(): void {
-    if (this.love && this.love.currentTime > 0 && !this.love.ended) this.love.play().catch(() => undefined);
+  pauseClips(): void {
+    Object.values(this.clips).forEach((clip) => clip.pause());
+  }
+
+  resumeClips(): void {
+    Object.values(this.clips).forEach((clip) => {
+      if (clip.currentTime > 0 && !clip.ended) clip.play().catch(() => undefined);
+    });
   }
 
   /** Sirena de patrulla (SERFOR): barrido "wail" continuo hasta stopSiren(). */
@@ -259,8 +292,8 @@ export class AudioSystem {
     this.stopSoundtrack();
     if (this.track) this.track.src = '';
     this.track = null;
-    this.love?.pause();
-    this.love = null;
+    Object.values(this.clips).forEach((clip) => clip.pause());
+    this.clips = {};
     void this.ctx?.close();
     this.ctx = null;
   }
@@ -356,20 +389,20 @@ export class AudioSystem {
     const track = this.ensureTrack();
     if (!track) return;
     this.trackPrimed = true;
-    const love = this.love;
-    if (love) {
-      love.muted = true;
-      love
+    // Los clips de las escenas también necesitan el gesto del usuario
+    Object.values(this.clips).forEach((clip) => {
+      clip.muted = true;
+      clip
         .play()
         .then(() => {
-          love.pause();
-          love.currentTime = 0;
+          clip.pause();
+          clip.currentTime = 0;
         })
         .catch(() => undefined)
         .finally(() => {
-          love.muted = this._muted;
+          clip.muted = this._muted;
         });
-    }
+    });
     if (this.trackActive) return;
     track.muted = true;
     track

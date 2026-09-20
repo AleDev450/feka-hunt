@@ -32,11 +32,13 @@ export const MASCOT = {
   /** Cuánto dura la pose de "recibir daño" al fallar / al escaparse uno */
   complainMs: 650,
   upsetMs: 1100,
+  /** Lo que grita al recibir el golpe */
+  hitPhrase: '¡AWAA!!',
 } as const;
 
 /** Grupo de amigos que anima al fondo (detrás de la laguna) — imgs/grupo_amigos_3.png */
 export const FRIENDS = {
-  x: 640,
+  x: 355,
   /** Pies del grupo (sobre el campo, al fondo) */
   y: 550,
   cheerMs: 1400,
@@ -56,7 +58,7 @@ export const PLAYER = {
   /** Cartuchos máximos visibles en el HUD */
   magazineSize: 6,
   /** Vida extra cada X puntos */
-  extraLifeEvery: 10000,
+  extraLifeEvery: 2500,
 } as const;
 
 export const SCORING = {
@@ -100,6 +102,36 @@ export const LOVE = {
   /** Reparto del tiempo del audio (fracciones acumuladas) */
   timeline: { appear: 0.08, arrive: 0.42, leave: 0.6, back: 0.92 },
   volume: 1,
+} as const;
+
+/**
+ * Escena de los niveles PARES: los amigos se ponen en modo disco mientras
+ * suena "ronchas". Dura lo que dura el audio (12.7 s); para acortarla, bajar
+ * `maxMs`.
+ */
+export const DISCO = {
+  src: '/assets/audio/ronchas.mp3',
+  durationMs: 12_700,
+  /** Tope de duración de la escena (el audio se desvanece al final) */
+  maxMs: 12_700,
+  volume: 0.9,
+  text: '¡RONCHAS!',
+  /** Cada cuánto cambian las luces y las poses */
+  lightMs: 180,
+  colors: [0xff3b7f, 0x3bd6ff, 0xffd93b, 0x7cff3b, 0xb43bff],
+} as const;
+
+/**
+ * Canción que suena en la pantalla final mientras se escribe el nombre
+ * para el ranking (empieza `delayMs` después de entrar).
+ */
+export const GAME_OVER_SONG = {
+  src: '/assets/audio/shalala.mp3',
+  durationMs: 18_400,
+  delayMs: 5000,
+  volume: 0.7,
+  /** Solo al perder (ponlo en false para que suene también al ganar) */
+  onlyOnDefeat: true,
 } as const;
 
 /** Créditos (autor del juego y música) */
@@ -158,36 +190,39 @@ export const TIMING = {
  */
 export const DIFFICULTY = {
   vulturesPerLevel: 8,
-  /** Nivel 1: 150 px/s → nivel 50: ~520 px/s */
-  speed: { base: 150, perLevel: 7.6, max: 520, jitter: 0.15 },
-  /** Nivel 1: 7 s para disparar → nivel 50: 2.6 s */
-  flyTimeMs: { base: 7000, perLevel: -90, min: 2600 },
+  /**
+   * Rampas `start` → `end` (nivel 1 → nivel 50) con curva: `curve` > 1 hace
+   * que los primeros niveles suban poquito y el salto gordo quede al final.
+   */
+  speed: { start: 150, end: 520, curve: 1.4, jitter: 0.15 },
+  /** Tiempo para disparar: 7 s en el nivel 1 → 2.6 s en el 50 */
+  flyTimeMs: { start: 7000, end: 2600, curve: 1.4 },
   /** Frecuencia del aleteo (fps de la animación) */
-  flapFps: { base: 9, perLevel: 0.18, max: 18 },
+  flapFps: { start: 9, end: 18, curve: 1.3 },
   /** A partir de qué nivel vuelan N gallinazos a la vez */
   simultaneous: [
     { fromLevel: 1, count: 1 },
-    { fromLevel: 3, count: 2 },
-    { fromLevel: 12, count: 3 },
-    { fromLevel: 30, count: 4 },
+    { fromLevel: 6, count: 2 },
+    { fromLevel: 18, count: 3 },
+    { fromLevel: 34, count: 4 },
   ],
   /** Disparos por tanda = base + extra por gallinazo adicional (tope: magazineSize) */
   shots: { base: 3, perExtraVulture: 1 },
   /** Trayectorias disponibles; las fáciles dejan de salir en niveles altos */
   patterns: [
-    { fromLevel: 1, toLevel: 20, pattern: 'straight' },
-    { fromLevel: 2, toLevel: 38, pattern: 'wave' },
-    { fromLevel: 3, pattern: 'zigzag' },
-    { fromLevel: 5, pattern: 'swoop' },
+    { fromLevel: 1, toLevel: 24, pattern: 'straight' },
+    { fromLevel: 4, toLevel: 40, pattern: 'wave' },
+    { fromLevel: 7, pattern: 'zigzag' },
+    { fromLevel: 12, pattern: 'swoop' },
   ],
   spawnSides: [
     { fromLevel: 1, side: 'bottom' },
-    { fromLevel: 3, side: 'left' },
-    { fromLevel: 3, side: 'right' },
+    { fromLevel: 8, side: 'left' },
+    { fromLevel: 8, side: 'right' },
   ],
   /** Cada cuánto cambia de dirección (zigzag): nivel 50 → 420 ms */
-  turnIntervalMs: { base: 1400, perLevel: -20, min: 420 },
-  waveAmplitude: { base: 40, perLevel: 1.8, max: 130 },
+  turnIntervalMs: { start: 1400, end: 420, curve: 1.3 },
+  waveAmplitude: { start: 40, end: 130, curve: 1.3 },
 } as const;
 
 export type FlightPattern = (typeof DIFFICULTY.patterns)[number]['pattern'];

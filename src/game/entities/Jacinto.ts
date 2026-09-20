@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import { ANIM, frameIndex } from '../config/animations';
-import { DEPTH, MASCOT } from '../config/settings';
+import { COLORS, DEPTH, MASCOT } from '../config/settings';
 import type { AudioSystem } from '../systems/AudioSystem';
+import { arcadeText } from '../ui/text';
 import { clamp } from '../utils/gameUtils';
 
 export enum JacintoState {
@@ -9,6 +10,7 @@ export enum JacintoState {
   CORRIENDO = 'CORRIENDO',
   RECIBIENDO = 'RECIBIENDO',
   CELEBRANDO = 'CELEBRANDO',
+  BAILANDO = 'BAILANDO',
 }
 
 /**
@@ -19,6 +21,7 @@ export enum JacintoState {
  */
 export class Jacinto extends Phaser.GameObjects.Sprite {
   jacintoState: JacintoState = JacintoState.IDLE;
+  private readonly shout: Phaser.GameObjects.Text;
 
   constructor(
     scene: Phaser.Scene,
@@ -27,6 +30,11 @@ export class Jacinto extends Phaser.GameObjects.Sprite {
     super(scene, MASCOT.homeX, MASCOT.y, 'jacinto', frameIndex('jacinto', 'idle1'));
     this.setOrigin(0.5, 1).setDepth(DEPTH.mascot);
     scene.add.existing(this);
+    this.shout = arcadeText(scene, MASCOT.homeX, MASCOT.y - this.height - 12, MASCOT.hitPhrase, 14, {
+      color: COLORS.goldText,
+    })
+      .setDepth(DEPTH.mascot + 1)
+      .setVisible(false);
     this.idle();
   }
 
@@ -57,11 +65,31 @@ export class Jacinto extends Phaser.GameObjects.Sprite {
     this.play(ANIM.jacintoIdle);
   }
 
+  /** Baila (escena disco de los niveles pares). */
+  dance(durationMs: number): void {
+    this.cancel();
+    this.jacintoState = JacintoState.BAILANDO;
+    this.play(ANIM.jacintoIdle);
+    this.anims.timeScale = 2.2;
+    this.scene.tweens.add({
+      targets: this,
+      y: MASCOT.y - 18,
+      duration: 190,
+      yoyo: true,
+      repeat: Math.max(0, Math.floor(durationMs / 380) - 1),
+      ease: 'Quad.easeOut',
+    });
+    this.scene.time.delayedCall(durationMs, () => {
+      if (this.jacintoState === JacintoState.BAILANDO) this.idle();
+    });
+  }
+
   private takeHit(durationMs: number): void {
     this.cancel();
     this.jacintoState = JacintoState.RECIBIENDO;
     this.play(ANIM.jacintoHit);
     this.audio?.play('awa');
+    this.say(durationMs);
     // Saltito hacia atrás por el golpe
     this.scene.tweens.add({
       targets: this,
@@ -112,6 +140,20 @@ export class Jacinto extends Phaser.GameObjects.Sprite {
         this.setY(MASCOT.y);
         onDone();
       },
+    });
+  }
+
+  /** "¡AWAA!!" encima de Jacinto mientras dura el golpe. */
+  private say(durationMs: number): void {
+    this.scene.tweens.killTweensOf(this.shout);
+    this.shout.setPosition(this.x, MASCOT.y - this.height - 12).setAlpha(1).setScale(0.5).setVisible(true);
+    this.scene.tweens.add({ targets: this.shout, scale: 1, duration: 150, ease: 'Back.easeOut' });
+    this.scene.tweens.add({
+      targets: this.shout,
+      alpha: 0,
+      delay: Math.max(200, durationMs - 250),
+      duration: 250,
+      onComplete: () => this.shout.setVisible(false),
     });
   }
 

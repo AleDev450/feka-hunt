@@ -1,4 +1,4 @@
-import { DIFFICULTY, PLAYER, type FlightPattern, type SpawnSide } from '../config/settings';
+import { DIFFICULTY, PLAYER, VICTORY, type FlightPattern, type SpawnSide } from '../config/settings';
 
 export interface DifficultyParams {
   level: number;
@@ -17,17 +17,18 @@ export interface DifficultyParams {
 }
 
 interface Ramp {
-  base: number;
-  perLevel: number;
-  max?: number;
-  min?: number;
+  /** Valor en el nivel 1 */
+  start: number;
+  /** Valor en el último nivel */
+  end: number;
+  /** >1 = sube despacio al principio y se endurece al final */
+  curve: number;
 }
 
+/** Interpola de `start` (nivel 1) a `end` (último nivel) siguiendo la curva. */
 const ramp = (r: Ramp, level: number): number => {
-  const value = r.base + r.perLevel * (level - 1);
-  if (r.max !== undefined) return Math.min(r.max, value);
-  if (r.min !== undefined) return Math.max(r.min, value);
-  return value;
+  const t = Math.min(1, Math.max(0, (level - 1) / (VICTORY.levels - 1)));
+  return r.start + (r.end - r.start) * Math.pow(t, r.curve);
 };
 
 const unlocked = <T extends { fromLevel: number; toLevel?: number }>(items: readonly T[], level: number): T[] =>

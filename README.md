@@ -52,15 +52,19 @@ en paralelo a los efectos.
 
 Hay **50 niveles** (`VICTORY.levels`), cada uno más difícil (`DIFFICULTY` en settings.ts):
 
+Las rampas van de `start` (nivel 1) a `end` (nivel 50) con una `curve` > 1: los primeros niveles
+suben poquito y el salto gordo queda al final.
+
 | Nivel | Velocidad | Tiempo para disparar | Gallinazos a la vez | Disparos |
 |------:|----------:|---------------------:|--------------------:|---------:|
 | 1     | 150 px/s  | 7.0 s                | 1                   | 3        |
-| 12    | 234 px/s  | 6.0 s                | 3                   | 5        |
-| 30    | 370 px/s  | 4.4 s                | 4                   | 6        |
+| 10    | 185 px/s  | 6.6 s                | 2                   | 4        |
+| 20    | 248 px/s  | 5.8 s                | 3                   | 5        |
+| 30    | 328 px/s  | 4.9 s                | 3                   | 5        |
 | 50    | 520 px/s  | 2.6 s                | 4                   | 6        |
 
 Además los giros en zigzag son cada vez más bruscos y las trayectorias fáciles dejan de salir
-(la recta desde el nivel 21, la ondulada desde el 39).
+(la recta desde el nivel 25, la ondulada desde el 41). Vida extra cada `PLAYER.extraLifeEvery` puntos (2500).
 
 ## Personajes
 
@@ -68,7 +72,7 @@ Además los giros en zigzag son cada vez más bruscos y las trayectorias fácile
   Cada gallinazo que aparece sortea su tipo; cada tipo tiene su propio aleteo, caída y pose de muerto.
 - **Pequeño Jacinto** (`imgs/pequeno_jancito.png`, `src/game/entities/Jacinto.ts`): la mascota del cazador.
   Tiene 3 animaciones de 6 frames (idle, corriendo y recibir daño): corre a recoger el gallinazo abatido y
-  celebra, y recibe el golpe con `public/assets/audio/awa.mp3` cuando el jugador falla o se le escapa uno.
+  celebra, y al fallar el jugador recibe el golpe gritando "¡AWAA!!" con `public/assets/audio/awa.mp3`.
   Posición y tiempos en `MASCOT` (settings.ts).
 - **Cazador** (`imgs/nuevo_personaje.png`): usa un único sprite ("apuntando"); disparo, recarga, daño y celebración
   son efectos (retroceso, fogonazo, destello rojo, salto). De esa hoja sale también el retrato del HUD.
@@ -80,12 +84,24 @@ Además los giros en zigzag son cada vez más bruscos y las trayectorias fácile
 `src/game/world/Background.ts`: cielo por bandas, nubes, montañas, laguna, árbol a la izquierda y
 **choza** a la derecha (`imgs/choza_para_background.png`), pasto delantero y arbustos.
 
-## Entre niveles: "Chi amu gordo"
+## Entre niveles (alternan por nivel)
 
-Al completar un nivel se pausa toda la música y suena `public/assets/audio/teamogordo.mp3`. Mientras dura el audio,
+Al completar un nivel se pausa la canción y suena una escena, según el nivel terminado:
+
+- **Niveles impares — "Chi amu gordo"** (`teamogordo.mp3`, 4 s).
+- **Niveles pares — disco** (`ronchas.mp3`, 12.7 s): luces de colores, bola de discoteca, los amigos animando
+  y Jacinto bailando (`src/game/cutscenes/DiscoInterlude.ts`, ajustes en `DISCO`; `maxMs` acorta la escena).
+
+En la escena de los impares, mientras dura el audio,
 la chica (`imgs/mujer.png`) sale de Jacinto, camina hasta el cazador, aparece "Chi amu gordo" con corazones y
 vuelve con él (`src/game/cutscenes/LoveInterlude.ts`, tiempos en `LOVE`). El reloj de la canción
 se congela durante la escena. En el final con SERFOR, la chica aparece llorando y termina capturada.
+
+## Pantalla final
+
+Al perder, 5 segundos después de entrar a la pantalla final arranca `public/assets/audio/shalala.mp3`
+en bucle mientras se escribe el nombre para el ranking (`GAME_OVER_SONG` en settings.ts;
+`onlyOnDefeat: false` para que suene también al ganar).
 
 ## Final: llega SERFOR
 

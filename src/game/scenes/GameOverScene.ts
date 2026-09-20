@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import type { GameResult } from '@/types/game';
-import { COLORS, DEPTH, GAME_HEIGHT, GAME_WIDTH, STORAGE_KEYS } from '../config/settings';
+import { COLORS, DEPTH, GAME_HEIGHT, GAME_OVER_SONG, GAME_WIDTH, STORAGE_KEYS } from '../config/settings';
 import { getServices } from '../config/services';
 import { ArcadeButton } from '../ui/ArcadeButton';
 import { MAX_NAME_LENGTH, NameInput } from '../ui/NameInput';
@@ -32,6 +32,7 @@ export class GameOverScene extends Phaser.Scene {
     const { result, record, isNewRecord } = this.data_;
     const cx = GAME_WIDTH / 2;
     this.input.setDefaultCursor('default');
+    this.playGameOverSong();
     new Background(this);
     this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x05050c, 0.72).setOrigin(0).setDepth(DEPTH.hud - 1);
     const text = (x: number, y: number, value: string, size: number, color?: string) =>
@@ -70,6 +71,17 @@ export class GameOverScene extends Phaser.Scene {
       new ArcadeButton(this, cx, 640, 'RANKING', () => this.scene.start(SCENES.ranking), { width: 300, fontSize: 14 }),
       new ArcadeButton(this, cx + 330, 640, 'MENÚ', () => this.scene.start(SCENES.menu), { width: 300, fontSize: 14 }),
     ].forEach((b) => b.setDepth(DEPTH.hud));
+  }
+
+  /** Tras unos segundos arranca "shalala" mientras se escribe el nombre. */
+  private playGameOverSong(): void {
+    const { audio } = getServices(this);
+    if (GAME_OVER_SONG.onlyOnDefeat && this.data_.result.won) return;
+    const timer = this.time.delayedCall(GAME_OVER_SONG.delayMs, () => audio.playClip('gameOver'));
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      timer.remove();
+      audio.fadeOutClip('gameOver', 500);
+    });
   }
 
   private createNameEntry(result: GameResult): void {

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import { COLORS, CREDITS, DEPTH, FRIENDS, GAME_WIDTH, INPUT, PLAYER, RAID, SCORING, TIMING, VICTORY } from '../config/settings';
+import { COLORS, CREDITS, DEPTH, DISCO, FRIENDS, GAME_WIDTH, INPUT, PLAYER, RAID, SCORING, TIMING, VICTORY } from '../config/settings';
 import { getServices, type GameServices } from '../config/services';
+import { DiscoInterlude } from '../cutscenes/DiscoInterlude';
 import { LoveInterlude } from '../cutscenes/LoveInterlude';
 import { SerforRaid } from '../cutscenes/SerforRaid';
 import { Crosshair } from '../entities/Crosshair';
@@ -161,6 +162,7 @@ export class GameScene extends Phaser.Scene {
     if (perfect) {
       this.score.addBonus(SCORING.perfectLevelBonus);
       this.refreshScore();
+      this.grantExtraLives();
     }
     // Superó el último nivel: ganó (y llega SERFOR igual)
     if (this.level >= VICTORY.levels) {
@@ -177,22 +179,34 @@ export class GameScene extends Phaser.Scene {
       this.mascot.celebrate();
       this.hunter.celebrate();
     }
-    this.time.delayedCall(TIMING.levelBannerMs + 300, () => this.playLoveInterlude());
+    this.time.delayedCall(TIMING.levelBannerMs + 300, () => this.playInterlude());
   }
 
-  /** Entre niveles: se pausa todo el audio y suena "te amo gordo" con su escena. */
-  private playLoveInterlude(): void {
+  /**
+   * Escena entre niveles: en los niveles pares, disco con "ronchas"; en los
+   * impares, la chica con "te amo gordo". En ambos casos se pausa la canción.
+   */
+  private playInterlude(): void {
     if (this.phase === 'gameover') return;
     this.phase = 'love';
     this.crosshair.setLocked(false);
     const { audio } = this.services;
     audio.pauseSoundtrack();
-    const durationMs = audio.playLoveClip();
-    new LoveInterlude(this, this.hunter, this.mascot).play(durationMs, () => {
+    const done = () => {
       if (this.phase !== 'love') return;
       audio.resumeSoundtrack();
       this.startLevel(this.level + 1);
-    });
+    };
+
+    if (this.level % 2 === 0) {
+      const durationMs = Math.min(audio.playClip('disco'), DISCO.maxMs);
+      new DiscoInterlude(this, this.friends, this.mascot).play(durationMs, () => {
+        audio.fadeOutClip('disco');
+        done();
+      });
+    } else {
+      new LoveInterlude(this, this.hunter, this.mascot).play(audio.playClip('love'), done);
+    }
   }
 
   /** Fin de la partida (gane o pierda): siempre llega SERFOR. */
@@ -247,7 +261,7 @@ export class GameScene extends Phaser.Scene {
     const offPause = this.services.bridge.on('control:pause', () => this.pauseGame());
     this.events.on(Phaser.Scenes.Events.RESUME, () => {
       this.input.setDefaultCursor(this.touchMode ? 'default' : 'none');
-      if (this.phase === 'love') this.services.audio.resumeLoveClip();
+      if (this.phase === 'love') this.services.audio.resumeClips();
       else this.services.audio.resumeSoundtrack();
       this.services.bridge.emit('game:resumed');
     });
@@ -255,7 +269,7 @@ export class GameScene extends Phaser.Scene {
       offPause();
       this.services.audio.stopSoundtrack();
       this.services.audio.stopSiren();
-      this.services.audio.pauseLoveClip();
+      this.services.audio.pauseClips();
       this.spawner.reset();
       this.input.setDefaultCursor('default');
       this.events.off(Phaser.Scenes.Events.RESUME);
@@ -362,8 +376,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   private grantExtraLives(): void {
+    if (this.lives >= PLAYER.maxLives) return;
     const extra = this.score.consumeExtraLives();
-    if (extra === 0 || this.lives >= PLAYER.maxLives) return;
+    if (extra === 0) return;
     this.lives = Math.min(PLAYER.maxLives, this.lives + extra);
     this.hud.setLives(this.lives);
     this.services.audio.play('extraLife');
@@ -402,7 +417,7 @@ export class GameScene extends Phaser.Scene {
   private pauseGame(): void {
     if (this.phase === 'gameover' || !this.scene.isActive()) return;
     this.services.audio.pauseSoundtrack();
-    this.services.audio.pauseLoveClip();
+    this.services.audio.pauseClips();
     this.scene.launch(SCENES.pause);
     this.scene.pause();
     this.services.bridge.emit('game:paused');

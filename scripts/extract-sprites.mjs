@@ -25,6 +25,7 @@ const HUNTER_SOURCE = join(ROOT, 'imgs', 'nuevo_personaje.png');
 const HUT_SOURCE = join(ROOT, 'imgs', 'choza_para_background.png');
 const VULTURES_SOURCE = join(ROOT, 'imgs', 'gallinazos.png');
 const JACINTO_SOURCE = join(ROOT, 'imgs', 'pequeno_jancito.png');
+const KICK_SOURCE = join(ROOT, 'imgs', 'kick.png');
 const OUT_DIR = join(ROOT, 'public', 'assets', 'sprites');
 const MANIFEST = join(ROOT, 'src', 'game', 'config', 'assetManifest.ts');
 
@@ -219,6 +220,8 @@ const SHEETS = [
 /** Imágenes sueltas */
 const IMAGES = [
   { key: 'logo', rect: [25, 28, 448, 178], scale: 1, outline: false },
+  // Logo del autor (imgs/kick.png)
+  { key: 'kickLogo', source: 'kick', rect: [0, 0, 1254, 1254], scale: 0.1, components: false, outline: false },
   { key: 'vulturePerched', source: 'vultures', rect: [1269, 101, 109, 138], scale: 0.85, components: false },
   { key: 'vultureHead', rect: [1299, 331, 181, 143], scale: 0.6 },
   { key: 'portrait', source: 'hunter', rect: [34, 103, 164, 159], scale: 0.34, components: false, outline: false },
@@ -310,6 +313,13 @@ const SOURCES = {
     hole: (r, g, b) => Math.max(r, g, b) <= 6,
   },
   // PNG con transparencia: el fondo ya viene en el canal alfa
+  kick: {
+    file: KICK_SOURCE,
+    useAlpha: true,
+    bg: () => false,
+    fg: () => true,
+    hole: () => false,
+  },
   jacinto: {
     file: JACINTO_SOURCE,
     useAlpha: true,

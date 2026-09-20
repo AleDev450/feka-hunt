@@ -1141,6 +1141,11 @@ export const IMAGES = {
     "width": 438,
     "height": 168
   },
+  "kickLogo": {
+    "file": "kickLogo.png",
+    "width": 113,
+    "height": 95
+  },
   "vulturePerched": {
     "file": "vulturePerched.png",
     "width": 95,
