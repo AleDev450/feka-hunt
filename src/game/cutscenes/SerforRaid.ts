@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { frameIndex } from '../config/animations';
 import { COLORS, DEPTH, GAME_HEIGHT, GAME_WIDTH, RAID, WORLD } from '../config/settings';
-import type { Dog } from '../entities/Dog';
+import type { Jacinto } from '../entities/Jacinto';
 import type { Hunter } from '../entities/Hunter';
 import { SerforAgent } from '../entities/SerforAgent';
 import type { AudioSystem } from '../systems/AudioSystem';
@@ -20,14 +20,14 @@ export class SerforRaid {
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly hunter: Hunter,
-    private readonly dog: Dog,
+    private readonly mascot: Jacinto,
     private readonly audio: AudioSystem,
   ) {}
 
   play(onDone: () => void): void {
     const s = this.scene;
     this.audio.startSiren();
-    this.dog.bark();
+    this.mascot.upset();
 
     // Luces rojo/azul parpadeando sobre toda la escena
     const overlay = s.add

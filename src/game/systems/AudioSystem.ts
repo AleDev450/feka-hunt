@@ -14,7 +14,6 @@ export type SfxKey =
   | 'combo'
   | 'levelup'
   | 'extraLife'
-  | 'bark'
   | 'awa'
   | 'gameover';
 
@@ -38,8 +37,7 @@ export const AUDIO_FILES: Record<SfxKey | LoopKey, string | null> = {
   combo: null,
   levelup: null,
   extraLife: null,
-  bark: null,
-  /** Queja del perro cuando el jugador falla */
+  /** Queja de Jacinto cuando el jugador falla */
   awa: '/assets/audio/awa.mp3',
   gameover: null,
   siren: null,
@@ -158,12 +156,6 @@ export class AudioSystem {
         break;
       case 'extraLife':
         [660, 880, 1320].forEach((f, i) => this.tone(t + i * 0.08, 'triangle', f, f, 0.12, 0.3));
-        break;
-      case 'bark':
-        for (let i = 0; i < 2; i++) {
-          this.tone(t + i * 0.18, 'sawtooth', 420, 180, 0.1, 0.22);
-          this.noise(t + i * 0.18, 0.08, 0.25, 'bandpass', 900, 500);
-        }
         break;
       case 'gameover':
         [440, 415, 392, 370, 330, 262].forEach((f, i) => this.tone(t + i * 0.2, 'triangle', f, f * 0.98, 0.22, 0.3));

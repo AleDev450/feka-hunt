@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { VULTURE_TYPES, vultureFlyAnim } from '../config/animations';
 import { COLORS, CREDITS, DEPTH, GAME_WIDTH, WORLD } from '../config/settings';
 import { getServices } from '../config/services';
-import { Dog } from '../entities/Dog';
+import { Jacinto } from '../entities/Jacinto';
 import { FriendsGroup } from '../entities/FriendsGroup';
 import { Hunter } from '../entities/Hunter';
 import { ArcadeButton, enableKeyboardMenu } from '../ui/ArcadeButton';
@@ -29,7 +29,7 @@ export class MenuScene extends Phaser.Scene {
     this.input.setDefaultCursor('default');
     this.background = new Background(this);
     new Hunter(this);
-    new Dog(this, audio);
+    new Jacinto(this, audio);
     new FriendsGroup(this);
     this.add.image(1090, WORLD.grassTopY + 12, 'vulturePerched').setOrigin(0.5, 1).setDepth(DEPTH.midground + 1);
 

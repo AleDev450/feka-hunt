@@ -36,8 +36,9 @@ export const vultureFrame = (type: VultureType, pose: VulturePose): number =>
 export const vultureFlyAnim = (type: VultureType): string => `vulture-fly-${type}`;
 
 export const ANIM = {
-  dogRun: 'dog-run',
-  dogBark: 'dog-bark',
+  jacintoIdle: 'jacinto-idle',
+  jacintoRun: 'jacinto-run',
+  jacintoHit: 'jacinto-hit',
   agentMaleRun: 'agentMale-run',
   agentFemaleRun: 'agentFemale-run',
   girlWalk: 'girl-walk',
@@ -45,7 +46,7 @@ export const ANIM = {
 
 export function registerAnimations(scene: Phaser.Scene): void {
   const { anims } = scene;
-  if (anims.exists(ANIM.dogRun)) return;
+  if (anims.exists(ANIM.jacintoIdle)) return;
 
   // Un aleteo por tipo de gallinazo
   for (const type of VULTURE_TYPES) {
@@ -57,18 +58,21 @@ export function registerAnimations(scene: Phaser.Scene): void {
       repeat: -1,
     });
   }
-  anims.create({
-    key: ANIM.dogRun,
-    frames: anims.generateFrameNumbers('dog', { frames: [frameIndex('dog', 'run'), frameIndex('dog', 'idle')] }),
-    frameRate: 9,
-    repeat: -1,
-  });
-  anims.create({
-    key: ANIM.dogBark,
-    frames: anims.generateFrameNumbers('dog', { frames: [frameIndex('dog', 'bark'), frameIndex('dog', 'idle')] }),
-    frameRate: 6,
-    repeat: -1,
-  });
+  // Pequeño Jacinto: 6 frames por animación
+  for (const [key, prefix, fps, repeat] of [
+    [ANIM.jacintoIdle, 'idle', 7, -1],
+    [ANIM.jacintoRun, 'run', 12, -1],
+    [ANIM.jacintoHit, 'hit', 9, 0],
+  ] as const) {
+    anims.create({
+      key,
+      frames: anims.generateFrameNumbers('jacinto', {
+        frames: [1, 2, 3, 4, 5, 6].map((n) => frameIndex('jacinto', `${prefix}${n}` as FrameName<'jacinto'>)),
+      }),
+      frameRate: fps,
+      repeat,
+    });
+  }
   anims.create({
     key: ANIM.girlWalk,
     frames: anims.generateFrameNumbers('girl', {

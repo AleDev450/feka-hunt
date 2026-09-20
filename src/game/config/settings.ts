@@ -19,7 +19,19 @@ export const WORLD = {
   /** Punto de aparición desde abajo (detrás del pasto) */
   riseY: 640,
   hunter: { x: 150, y: 710 },
-  dog: { homeX: 1150, y: 706, minX: 300, maxX: 1200 },
+} as const;
+
+/** Pequeño Jacinto, la mascota (imgs/pequeno_jancito.png) */
+export const MASCOT = {
+  homeX: 1150,
+  y: 706,
+  minX: 300,
+  maxX: 1200,
+  /** px/s corriendo */
+  runSpeed: 520,
+  /** Cuánto dura la pose de "recibir daño" al fallar / al escaparse uno */
+  complainMs: 650,
+  upsetMs: 1100,
 } as const;
 
 /** Grupo de amigos que anima al fondo (detrás de la laguna) — imgs/grupo_amigos_3.png */
@@ -75,7 +87,7 @@ export const VICTORY = {
 } as const;
 
 /**
- * Escena entre niveles: la chica sale del perro, camina hacia el cazador y
+ * Escena entre niveles: la chica sale de Jacinto, camina hacia el cazador y
  * vuelve. Dura exactamente lo que dura el audio (se leen fracciones de él).
  */
 export const LOVE = {
@@ -190,7 +202,7 @@ export const DEPTH = {
   vultures: 10,
   foreground: 20,
   bushes: 21,
-  dog: 25,
+  mascot: 25,
   hunter: 26,
   fx: 30,
   hud: 50,

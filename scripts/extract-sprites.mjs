@@ -24,6 +24,7 @@ const GIRL_SOURCE = join(ROOT, 'imgs', 'mujer.png');
 const HUNTER_SOURCE = join(ROOT, 'imgs', 'nuevo_personaje.png');
 const HUT_SOURCE = join(ROOT, 'imgs', 'choza_para_background.png');
 const VULTURES_SOURCE = join(ROOT, 'imgs', 'gallinazos.png');
+const JACINTO_SOURCE = join(ROOT, 'imgs', 'pequeno_jancito.png');
 const OUT_DIR = join(ROOT, 'public', 'assets', 'sprites');
 const MANIFEST = join(ROOT, 'src', 'game', 'config', 'assetManifest.ts');
 
@@ -110,17 +111,32 @@ const SHEETS = [
       tranquilo_dead: [1062, 849, 189, 68],
     },
   },
+  // --- Pequeño Jacinto (imgs/pequeno_jancito.png): mascota del cazador ---
   {
-    key: 'dog',
-    scale: 0.9,
-    holes: true,
+    key: 'jacinto',
+    source: 'jacinto',
+    scale: 0.42,
     anchor: 'bottom',
+    components: false,
     frames: {
-      idle: [27, 587, 126, 121],
-      run: [166, 598, 147, 111],
-      bark: [305, 588, 151, 120],
-      sit: [442, 588, 106, 121],
-      excited: [566, 543, 115, 163],
+      idle1: [48, 32, 188, 254],
+      idle2: [349, 35, 187, 252],
+      idle3: [632, 35, 199, 253],
+      idle4: [941, 35, 194, 253],
+      idle5: [1235, 32, 196, 256],
+      idle6: [1533, 32, 196, 253],
+      run1: [44, 334, 210, 226],
+      run2: [329, 332, 212, 228],
+      run3: [626, 332, 205, 234],
+      run4: [925, 331, 211, 235],
+      run5: [1226, 339, 211, 228],
+      run6: [1532, 331, 220, 229],
+      hit1: [49, 604, 197, 241],
+      hit2: [336, 596, 197, 249],
+      hit3: [618, 596, 230, 249],
+      hit4: [899, 687, 265, 158],
+      hit5: [1224, 653, 243, 190],
+      hit6: [1523, 597, 202, 248],
     },
   },
   // --- Grupo de apoyo (imgs/grupo_amigos_3.png): el grupo entero en 8 poses ---
@@ -294,6 +310,13 @@ const SOURCES = {
     hole: (r, g, b) => Math.max(r, g, b) <= 6,
   },
   // PNG con transparencia: el fondo ya viene en el canal alfa
+  jacinto: {
+    file: JACINTO_SOURCE,
+    useAlpha: true,
+    bg: () => false,
+    fg: () => true,
+    hole: () => false,
+  },
   friends: {
     file: FRIENDS_SOURCE,
     useAlpha: true,

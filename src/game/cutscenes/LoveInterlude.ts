@@ -1,32 +1,32 @@
 import Phaser from 'phaser';
 import { ANIM, frameIndex } from '../config/animations';
 import { DEPTH, GAME_WIDTH, LOVE, WORLD } from '../config/settings';
-import type { Dog } from '../entities/Dog';
 import type { Hunter } from '../entities/Hunter';
+import type { Jacinto } from '../entities/Jacinto';
 import { TEX } from '../ui/proceduralTextures';
 import { arcadeText } from '../ui/text';
 
 const PINK = '#ff6fae';
 
 /**
- * Escena entre niveles: la chica sale del perro, camina hasta el cazador,
- * le dice "Chi amu gordo" y vuelve a meterse en el perro. Toda la animación
+ * Escena entre niveles: la chica sale de Jacinto, camina hasta el cazador,
+ * le dice "Chi amu gordo" y vuelve con él. Toda la animación
  * se reparte en fracciones de `durationMs` (la duración del audio).
  */
 export class LoveInterlude {
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly hunter: Hunter,
-    private readonly dog: Dog,
+    private readonly mascot: Jacinto,
   ) {}
 
   play(durationMs: number, onDone: () => void): void {
     const s = this.scene;
     const t = LOVE.timeline;
     const at = (fraction: number) => fraction * durationMs;
-    const homeX = this.dog.x;
+    const homeX = this.mascot.x;
     const stopX = this.hunter.x + LOVE.stopOffsetX;
-    this.dog.sit();
+    this.mascot.idle();
 
     const hearts = s.add.particles(0, 0, TEX.heart, {
       speed: { min: 40, max: 140 },
@@ -49,7 +49,7 @@ export class LoveInterlude {
     s.tweens.add({ targets: [leftHeart, rightHeart], scale: 2.5, duration: 260, yoyo: true, repeat: -1 });
     s.tweens.add({ targets: titleParts, alpha: 0, delay: durationMs - 300, duration: 300 });
 
-    // La chica "sale" del perro
+    // La chica "sale" de Jacinto
     const girl = s.add
       .sprite(homeX, WORLD.hunter.y, 'girl', frameIndex('girl', 'walk1'))
       .setOrigin(0.5, 1)
@@ -72,7 +72,7 @@ export class LoveInterlude {
       this.hunter.celebrate();
     });
 
-    // Se va: vuelve caminando al perro y desaparece dentro de él
+    // Se va: vuelve caminando hasta Jacinto y desaparece
     s.time.delayedCall(at(t.leave), () => {
       girl.setFlipX(false).play(ANIM.girlWalk);
     });

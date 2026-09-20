@@ -4,7 +4,7 @@ import { getServices, type GameServices } from '../config/services';
 import { LoveInterlude } from '../cutscenes/LoveInterlude';
 import { SerforRaid } from '../cutscenes/SerforRaid';
 import { Crosshair } from '../entities/Crosshair';
-import { Dog } from '../entities/Dog';
+import { Jacinto } from '../entities/Jacinto';
 import { FriendsGroup } from '../entities/FriendsGroup';
 import { Hunter, HunterPose } from '../entities/Hunter';
 import type { Vulture, VultureOutcome } from '../entities/Vulture';
@@ -31,7 +31,7 @@ export class GameScene extends Phaser.Scene {
   private services!: GameServices;
   private background!: Background;
   private hunter!: Hunter;
-  private dog!: Dog;
+  private mascot!: Jacinto;
   private friends!: FriendsGroup;
   private crosshair!: Crosshair;
   private hud!: Hud;
@@ -70,7 +70,7 @@ export class GameScene extends Phaser.Scene {
 
     this.background = new Background(this);
     this.hunter = new Hunter(this);
-    this.dog = new Dog(this, this.services.audio);
+    this.mascot = new Jacinto(this, this.services.audio);
     this.friends = new FriendsGroup(this);
     this.crosshair = new Crosshair(this, this.touchMode);
     this.hud = new Hud(this, {
@@ -85,7 +85,7 @@ export class GameScene extends Phaser.Scene {
     this.spawner = new SpawnSystem(this, {
       onResolved: (v, outcome) => this.onVultureResolved(v, outcome),
       onFlee: () => this.services.audio.play('escape'),
-      onLanded: (v) => this.dog.fetch(v.x),
+      onLanded: (v) => this.mascot.fetch(v.x),
       onFlightComplete: () => this.onFlightComplete(),
     });
 
@@ -174,7 +174,7 @@ export class GameScene extends Phaser.Scene {
       this.banner.show(`NIVEL ${this.level} COMPLETO`, `GALLINAZOS ${killed}/${this.slots.length}`, TIMING.levelBannerMs);
     }
     if (killed >= this.slots.length / 2) {
-      this.dog.celebrate();
+      this.mascot.celebrate();
       this.hunter.celebrate();
     }
     this.time.delayedCall(TIMING.levelBannerMs + 300, () => this.playLoveInterlude());
@@ -188,7 +188,7 @@ export class GameScene extends Phaser.Scene {
     const { audio } = this.services;
     audio.pauseSoundtrack();
     const durationMs = audio.playLoveClip();
-    new LoveInterlude(this, this.hunter, this.dog).play(durationMs, () => {
+    new LoveInterlude(this, this.hunter, this.mascot).play(durationMs, () => {
       if (this.phase !== 'love') return;
       audio.resumeSoundtrack();
       this.startLevel(this.level + 1);
@@ -213,7 +213,7 @@ export class GameScene extends Phaser.Scene {
     const result = this.score.toResult(this.level, won);
     this.services.bridge.emit('game:over', result);
     const data: GameOverData = { result, record: this.score.record, isNewRecord };
-    new SerforRaid(this, this.hunter, this.dog, this.services.audio).play(() => this.scene.start(SCENES.gameOver, data));
+    new SerforRaid(this, this.hunter, this.mascot, this.services.audio).play(() => this.scene.start(SCENES.gameOver, data));
   }
 
   private showCredits(): void {
@@ -301,7 +301,7 @@ export class GameScene extends Phaser.Scene {
       this.score.registerMiss();
       this.floating.show(x, y - 24, 'FALLO', COLORS.grey, 12, 24);
       this.friends.sad(FRIENDS.missMs, false);
-      this.dog.complain();
+      this.mascot.complain();
     } else {
       if (hitsThisShot > 1) this.floating.show(GAME_WIDTH / 2, 200, `¡DOBLETE! x${hitsThisShot}`, COLORS.goldText, 22);
       this.grantExtraLives();
@@ -337,7 +337,7 @@ export class GameScene extends Phaser.Scene {
     this.score.registerMiss();
     this.refreshScore();
     this.hunter.hurt();
-    this.dog.bark();
+    this.mascot.upset();
     this.friends.sad();
     this.floating.show(Phaser.Math.Clamp(vulture.x, 200, GAME_WIDTH - 200), 140, '¡SE ESCAPÓ! -1 VIDA', COLORS.redText, 16, 30);
     this.cameras.main.flash(160, 140, 20, 20);

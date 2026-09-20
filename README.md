@@ -66,8 +66,10 @@ Además los giros en zigzag son cada vez más bruscos y las trayectorias fácile
 
 - **Gallinazos** (`imgs/gallinazos.png`): 6 tipos (clásico, narizón, serio, e-sport, mohicano y tranquilo).
   Cada gallinazo que aparece sortea su tipo; cada tipo tiene su propio aleteo, caída y pose de muerto.
-- **Perro** (`src/game/entities/Dog.ts`): corre a recoger el gallinazo abatido, ladra cuando uno escapa y
-  se queja con `public/assets/audio/awa.mp3` cuando el jugador falla un disparo.
+- **Pequeño Jacinto** (`imgs/pequeno_jancito.png`, `src/game/entities/Jacinto.ts`): la mascota del cazador.
+  Tiene 3 animaciones de 6 frames (idle, corriendo y recibir daño): corre a recoger el gallinazo abatido y
+  celebra, y recibe el golpe con `public/assets/audio/awa.mp3` cuando el jugador falla o se le escapa uno.
+  Posición y tiempos en `MASCOT` (settings.ts).
 - **Cazador** (`imgs/nuevo_personaje.png`): usa un único sprite ("apuntando"); disparo, recarga, daño y celebración
   son efectos (retroceso, fogonazo, destello rojo, salto). De esa hoja sale también el retrato del HUD.
 - **Grupo de amigos** (`imgs/grupo_amigos_3.png`, `src/game/entities/FriendsGroup.ts`): al fondo, detrás de la laguna.
@@ -81,8 +83,8 @@ Además los giros en zigzag son cada vez más bruscos y las trayectorias fácile
 ## Entre niveles: "Chi amu gordo"
 
 Al completar un nivel se pausa toda la música y suena `public/assets/audio/teamogordo.mp3`. Mientras dura el audio,
-la chica (`imgs/mujer.png`) sale del perro, camina hasta el cazador, aparece "Chi amu gordo" con corazones y
-vuelve a meterse en el perro (`src/game/cutscenes/LoveInterlude.ts`, tiempos en `LOVE`). El reloj de la canción
+la chica (`imgs/mujer.png`) sale de Jacinto, camina hasta el cazador, aparece "Chi amu gordo" con corazones y
+vuelve con él (`src/game/cutscenes/LoveInterlude.ts`, tiempos en `LOVE`). El reloj de la canción
 se congela durante la escena. En el final con SERFOR, la chica aparece llorando y termina capturada.
 
 ## Final: llega SERFOR
