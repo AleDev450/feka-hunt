@@ -55,7 +55,7 @@ export const FRIENDS = {
 
 export const PLAYER = {
   lives: 3,
-  maxLives: 5,
+  maxLives: 3,
   /** Cartuchos máximos visibles en el HUD */
   magazineSize: 6,
   /** Vida extra cada X puntos */
@@ -193,9 +193,9 @@ export const DIFFICULTY = {
    * Rampas `start` → `end` (nivel 1 → nivel 50) con curva: `curve` > 1 hace
    * que los primeros niveles suban poquito y el salto gordo quede al final.
    */
-  speed: { start: 170, end: 650, curve: 0.9, jitter: 0.15 },
+  speed: { start: 210, end: 760, curve: 0.85, jitter: 0.12 },
   /** Tiempo para disparar: 6.5 s en el nivel 1 → 2.2 s en el 50 */
-  flyTimeMs: { start: 6500, end: 2200, curve: 0.9 },
+  flyTimeMs: { start: 5600, end: 1800, curve: 0.85 },
   /** Frecuencia del aleteo (fps de la animación) */
   flapFps: { start: 9, end: 18, curve: 1.3 },
   /** A partir de qué nivel vuelan N gallinazos a la vez */

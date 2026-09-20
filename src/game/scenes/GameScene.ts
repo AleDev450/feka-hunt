@@ -144,7 +144,7 @@ export class GameScene extends Phaser.Scene {
     this.services.audio.play('reload');
     this.reloadingUntil = this.time.now + TIMING.reloadMs;
     this.phase = 'flight';
-    this.time.delayedCall(TIMING.reloadMs * 0.5, () => this.spawner.startFlight(this.params, count));
+    this.time.delayedCall(TIMING.reloadMs * 0.5, () => this.spawner.startFlight(this.params, count, this.flightStart));
   }
 
   private onFlightComplete(): void {
@@ -162,7 +162,6 @@ export class GameScene extends Phaser.Scene {
     if (perfect) {
       this.score.addBonus(SCORING.perfectLevelBonus);
       this.refreshScore();
-      this.grantExtraLives();
     }
     // Superó el último nivel: ganó (y llega SERFOR igual)
     if (this.level >= VICTORY.levels) {
@@ -318,7 +317,6 @@ export class GameScene extends Phaser.Scene {
       this.mascot.complain();
     } else {
       if (hitsThisShot > 1) this.floating.show(GAME_WIDTH / 2, 200, `¡DOBLETE! x${hitsThisShot}`, COLORS.goldText, 22);
-      this.grantExtraLives();
     }
     this.refreshScore();
 
@@ -373,16 +371,6 @@ export class GameScene extends Phaser.Scene {
     this.hud.setScore(this.score.score);
     this.hud.setRecord(this.score.record);
     this.hud.setCombo(this.score.multiplier, this.score.combo);
-  }
-
-  private grantExtraLives(): void {
-    if (this.lives >= PLAYER.maxLives) return;
-    const extra = this.score.consumeExtraLives();
-    if (extra === 0) return;
-    this.lives = Math.min(PLAYER.maxLives, this.lives + extra);
-    this.hud.setLives(this.lives);
-    this.services.audio.play('extraLife');
-    this.floating.show(GAME_WIDTH / 2, 240, '¡VIDA EXTRA!', COLORS.redText, 24);
   }
 
   private createEffects(): void {

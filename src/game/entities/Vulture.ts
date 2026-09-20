@@ -49,7 +49,6 @@ export class Vulture extends Phaser.GameObjects.Sprite {
   private turnIntervalMs = 0;
   private phase = 0;
   private waveAmplitude = 0;
-  private entered = false;
 
   constructor(scene: Phaser.Scene) {
     super(scene, -300, -300, 'vulture', 0);
@@ -60,7 +59,7 @@ export class Vulture extends Phaser.GameObjects.Sprite {
     return this.active && (this.vState === VultureState.FLYING || this.vState === VultureState.ESCAPED);
   }
 
-  spawn(params: DifficultyParams, side: SpawnSide, pattern: FlightPattern, slot = 0, slots = 1): this {
+  spawn(params: DifficultyParams, side: SpawnSide, pattern: FlightPattern, slot = 0, slots = 1, forcedType?: VultureType): this {
     const area = WORLD.flyArea;
     this.speed = params.speed * randomRange(1 - params.speedJitter, 1 + params.speedJitter);
     this.pattern = pattern;
@@ -71,7 +70,6 @@ export class Vulture extends Phaser.GameObjects.Sprite {
     this.stateTimer = 0;
     this.turnTimer = this.turnIntervalMs * randomRange(0.5, 1);
     this.phase = randomRange(0, Math.PI * 2);
-    this.entered = false;
 
     if (side === 'bottom') {
       // Repartir en franjas cuando salen varios a la vez
@@ -79,17 +77,17 @@ export class Vulture extends Phaser.GameObjects.Sprite {
       const x = area.left + 120 + laneW * slot + randomRange(0.15, 0.85) * laneW;
       const dir = x < GAME_WIDTH / 2 ? 1 : -1;
       const angle = Phaser.Math.DegToRad(randomRange(25, 60));
-      this.setPosition(x, WORLD.riseY);
+      this.setPosition(x, area.bottom - 20);
       this.setVelocity(Math.sin(angle) * dir * (Math.random() < 0.8 ? 1 : -1), -Math.cos(angle));
     } else {
       const dir = side === 'left' ? 1 : -1;
       const angle = Phaser.Math.DegToRad(randomRange(-25, 20));
-      this.setPosition(side === 'left' ? -70 : GAME_WIDTH + 70, randomRange(area.top + 40, area.bottom - 140));
+      this.setPosition(side === 'left' ? area.left + 10 : area.right - 10, randomRange(area.top + 40, area.bottom - 140));
       this.setVelocity(Math.cos(angle) * dir, Math.sin(angle));
     }
 
     this.vState = VultureState.FLYING;
-    this.vType = pick(VULTURE_TYPES);
+    this.vType = forcedType ?? pick(VULTURE_TYPES);
     this.setActive(true).setVisible(true).setAlpha(1).setDepth(DEPTH.vultures);
     this.play(vultureFlyAnim(this.vType));
     this.anims.timeScale = params.flapFps / 10;
@@ -100,9 +98,10 @@ export class Vulture extends Phaser.GameObjects.Sprite {
   flee(): boolean {
     if (this.vState !== VultureState.FLYING) return false;
     this.vState = VultureState.ESCAPED;
-    const sideways = Math.sign(this.vx) || 1;
-    this.vx = sideways * this.speed * 0.35;
-    this.vy = -this.speed * 1.5;
+    // La fuga termina dentro del área de juego: no desaparece por un borde.
+    this.vx = 0;
+    this.vy = 0;
+    this.stateTimer = 450;
     this.anims.timeScale *= 1.5;
     return true;
   }
@@ -148,10 +147,9 @@ export class Vulture extends Phaser.GameObjects.Sprite {
         this.updateFlying(delta, dt);
         break;
       case VultureState.ESCAPED:
-        this.x += this.vx * dt;
-        this.y += this.vy * dt;
-        this.setFlipX(this.vx < 0);
-        if (this.y < -130 || this.x < -160 || this.x > GAME_WIDTH + 160) this.resolve('escaped');
+        this.stateTimer -= delta;
+        this.setAlpha(Math.max(0, this.stateTimer / 450));
+        if (this.stateTimer <= 0) this.resolve('escaped');
         break;
       case VultureState.HIT:
         this.stateTimer -= delta;
@@ -217,13 +215,10 @@ export class Vulture extends Phaser.GameObjects.Sprite {
       this.y += Math.cos(this.phase) * this.waveAmplitude * omega * dt;
     }
 
-    if (!this.entered) {
-      this.entered = this.x > area.left && this.x < area.right && this.y > area.top && this.y < area.bottom;
-    } else {
-      if ((this.x < area.left && this.vx < 0) || (this.x > area.right && this.vx > 0)) this.vx = -this.vx;
-      if ((this.y < area.top && this.vy < 0) || (this.y > area.bottom && this.vy > 0)) this.vy = -this.vy;
-      this.y = Phaser.Math.Clamp(this.y, area.top - 30, area.bottom + 30);
-    }
+    if ((this.x <= area.left && this.vx < 0) || (this.x >= area.right && this.vx > 0)) this.vx = -this.vx;
+    if ((this.y <= area.top && this.vy < 0) || (this.y >= area.bottom && this.vy > 0)) this.vy = -this.vy;
+    this.x = Phaser.Math.Clamp(this.x, area.left, area.right);
+    this.y = Phaser.Math.Clamp(this.y, area.top, area.bottom);
 
     this.setFlipX(this.vx < 0);
     if (this.elapsed >= this.flyTimeMs && this.flee()) this.emit('flee', this);

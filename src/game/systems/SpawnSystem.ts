@@ -2,6 +2,7 @@ import type Phaser from 'phaser';
 import { TIMING } from '../config/settings';
 import { Vulture, type VultureOutcome } from '../entities/Vulture';
 import { pick } from '../utils/gameUtils';
+import { VULTURE_TYPES, type VultureType } from '../config/animations';
 import type { DifficultyParams } from './DifficultySystem';
 
 export interface SpawnHandlers {
@@ -34,7 +35,7 @@ export class SpawnSystem {
     return this.pendingSpawns > 0 || this.inPlay.size > 0;
   }
 
-  startFlight(params: DifficultyParams, count: number): void {
+  startFlight(params: DifficultyParams, count: number, typeOffset = 0): void {
     this.pendingSpawns = count;
     this.fleeOnSpawn = false;
     this.timers = [];
@@ -43,7 +44,8 @@ export class SpawnSystem {
         this.pendingSpawns--;
         const vulture = this.acquire();
         this.inPlay.add(vulture);
-        vulture.spawn(params, pick(params.spawnSides), pick(params.patterns), i, count);
+        const type = VULTURE_TYPES[(typeOffset + i) % VULTURE_TYPES.length] as VultureType;
+        vulture.spawn(params, pick(params.spawnSides), pick(params.patterns), i, count, type);
         if (this.fleeOnSpawn && vulture.flee()) this.handlers.onFlee(vulture);
       });
       this.timers.push(timer);
