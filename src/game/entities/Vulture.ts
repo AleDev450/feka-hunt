@@ -98,10 +98,11 @@ export class Vulture extends Phaser.GameObjects.Sprite {
   flee(): boolean {
     if (this.vState !== VultureState.FLYING) return false;
     this.vState = VultureState.ESCAPED;
-    // La fuga termina dentro del área de juego: no desaparece por un borde.
-    this.vx = 0;
-    this.vy = 0;
-    this.stateTimer = 450;
+    // La fuga es visible: sube rápido hasta salir por arriba del escenario.
+    const sideways = Math.sign(this.vx) || 1;
+    this.vx = sideways * this.speed * 0.45;
+    this.vy = -this.speed * 2.1;
+    this.setAlpha(1);
     this.anims.timeScale *= 1.5;
     return true;
   }
@@ -147,9 +148,10 @@ export class Vulture extends Phaser.GameObjects.Sprite {
         this.updateFlying(delta, dt);
         break;
       case VultureState.ESCAPED:
-        this.stateTimer -= delta;
-        this.setAlpha(Math.max(0, this.stateTimer / 450));
-        if (this.stateTimer <= 0) this.resolve('escaped');
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+        this.setFlipX(this.vx < 0);
+        if (this.y < -130 || this.x < -160 || this.x > GAME_WIDTH + 160) this.resolve('escaped');
         break;
       case VultureState.HIT:
         this.stateTimer -= delta;
