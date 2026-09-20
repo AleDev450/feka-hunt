@@ -6,79 +6,133 @@ export const ASSET_BASE_PATH = '/assets/sprites/';
 export const SPRITE_SHEETS = {
   "hunter": {
     "file": "hunter.png",
-    "frameWidth": 153,
-    "frameHeight": 152,
+    "frameWidth": 164,
+    "frameHeight": 213,
     "frames": {
       "idle": {
         "index": 0,
         "body": {
-          "x": 27,
-          "y": 1,
-          "w": 99,
-          "h": 150
+          "x": 24,
+          "y": 64,
+          "w": 116,
+          "h": 148
+        }
+      },
+      "idle2": {
+        "index": 1,
+        "body": {
+          "x": 24,
+          "y": 65,
+          "w": 115,
+          "h": 147
+        }
+      },
+      "walk1": {
+        "index": 2,
+        "body": {
+          "x": 30,
+          "y": 66,
+          "w": 103,
+          "h": 146
+        }
+      },
+      "walk2": {
+        "index": 3,
+        "body": {
+          "x": 26,
+          "y": 67,
+          "w": 111,
+          "h": 145
+        }
+      },
+      "walk3": {
+        "index": 4,
+        "body": {
+          "x": 28,
+          "y": 68,
+          "w": 108,
+          "h": 144
+        }
+      },
+      "walk4": {
+        "index": 5,
+        "body": {
+          "x": 29,
+          "y": 66,
+          "w": 106,
+          "h": 146
         }
       },
       "aim": {
-        "index": 1,
+        "index": 6,
         "body": {
-          "x": 6,
-          "y": 16,
-          "w": 141,
-          "h": 135
+          "x": 3,
+          "y": 62,
+          "w": 157,
+          "h": 150
         }
       },
       "shoot": {
-        "index": 2,
+        "index": 7,
         "body": {
           "x": 1,
-          "y": 16,
-          "w": 151,
-          "h": 135
+          "y": 63,
+          "w": 162,
+          "h": 149
         }
       },
       "recoil": {
-        "index": 3,
+        "index": 8,
         "body": {
-          "x": 29,
-          "y": 11,
-          "w": 95,
-          "h": 140
+          "x": 15,
+          "y": 64,
+          "w": 134,
+          "h": 148
         }
       },
       "reload": {
-        "index": 4,
+        "index": 9,
         "body": {
-          "x": 31,
-          "y": 17,
-          "w": 90,
-          "h": 134
+          "x": 15,
+          "y": 60,
+          "w": 134,
+          "h": 152
+        }
+      },
+      "reload2": {
+        "index": 10,
+        "body": {
+          "x": 16,
+          "y": 59,
+          "w": 132,
+          "h": 153
         }
       },
       "hurt": {
-        "index": 5,
+        "index": 11,
         "body": {
-          "x": 35,
-          "y": 43,
-          "w": 82,
-          "h": 108
+          "x": 29,
+          "y": 59,
+          "w": 106,
+          "h": 153
         }
       },
       "crouch": {
-        "index": 6,
+        "index": 12,
         "body": {
-          "x": 35,
-          "y": 59,
-          "w": 83,
-          "h": 92
+          "x": 2,
+          "y": 83,
+          "w": 160,
+          "h": 129
         }
       },
       "jump": {
-        "index": 7,
+        "index": 13,
         "body": {
-          "x": 20,
+          "x": 10,
           "y": 1,
-          "w": 112,
-          "h": 150
+          "w": 144,
+          "h": 211
         }
       }
     }
@@ -898,8 +952,13 @@ export const IMAGES = {
   },
   "portrait": {
     "file": "portrait.png",
-    "width": 51,
-    "height": 58
+    "width": 56,
+    "height": 54
+  },
+  "hut": {
+    "file": "hut.png",
+    "width": 274,
+    "height": 329
   },
   "iconVulture": {
     "file": "iconVulture.png",

@@ -64,9 +64,15 @@ Además los giros en zigzag son cada vez más bruscos y las trayectorias fácile
 
 ## Personajes
 
-- **Cazador:** usa un único sprite ("apuntando"); disparo, recarga, daño y celebración son efectos (retroceso, fogonazo, destello rojo, salto).
+- **Cazador** (`imgs/nuevo_personaje.png`): usa un único sprite ("apuntando"); disparo, recarga, daño y celebración
+  son efectos (retroceso, fogonazo, destello rojo, salto). De esa hoja sale también el retrato del HUD.
 - **Grupo de amigos** (`imgs/grupo_amigos_2.jpg`, `src/game/entities/FriendsGroup.ts`): al fondo, detrás de la laguna.
   Animan (4 poses) cada gallinazo abatido y se ponen tristes (3 poses) al fallar o cuando uno escapa, con sus frases. Posición, tiempos y frases en `FRIENDS` (settings.ts).
+
+## Escenario
+
+`src/game/world/Background.ts`: cielo por bandas, nubes, montañas, laguna, árbol a la izquierda y
+**choza** a la derecha (`imgs/choza_para_background.png`), pasto delantero y arbustos.
 
 ## Entre niveles: "Chi amu gordo"
 
@@ -115,8 +121,9 @@ en el navegador (solo ese dispositivo). Para el ranking online compartido con Su
 
 La clave *anon* es pública por diseño; la seguridad la dan las políticas RLS del esquema.
 
-El juego envía la puntuación **una sola vez**, al terminar la partida. Los rankings admiten filtro por periodo
-(total / semana / hoy), evento y temporada.
+La pantalla de ranking muestra el **top 50** de cada periodo (total / semana / hoy), paginado de 10 en 10
+(botones ANTERIOR/SIGUIENTE, flechas ← → o rueda del ratón). El juego envía la puntuación **una sola vez**,
+al terminar la partida. Los rankings admiten además filtro por evento y temporada.
 
 ## Controles
 

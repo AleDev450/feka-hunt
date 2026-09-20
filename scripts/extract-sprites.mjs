@@ -21,6 +21,8 @@ const SERFOR_SOURCE = join(ROOT, 'imgs', 'serfor.png');
 const FRIENDS_SOURCE = join(ROOT, 'imgs', 'grupo_amigos_2.jpg');
 const FRIENDS_TILE = [54, 53, 71];
 const GIRL_SOURCE = join(ROOT, 'imgs', 'mujer.png');
+const HUNTER_SOURCE = join(ROOT, 'imgs', 'nuevo_personaje.png');
+const HUT_SOURCE = join(ROOT, 'imgs', 'choza_para_background.png');
 const OUT_DIR = join(ROOT, 'public', 'assets', 'sprites');
 const MANIFEST = join(ROOT, 'src', 'game', 'config', 'assetManifest.ts');
 
@@ -36,17 +38,25 @@ const OUTLINE = [22, 12, 24]; // contorno oscuro para dar contraste sobre el cie
 const SHEETS = [
   {
     key: 'hunter',
-    scale: 1,
+    source: 'hunter',
+    scale: 0.7,
     anchor: 'bottom',
+    holes: true,
     frames: {
-      idle: [496, 62, 106, 166],
-      aim: [616, 86, 149, 142],
-      shoot: [763, 86, 159, 142],
-      recoil: [924, 80, 102, 148],
-      reload: [1043, 86, 98, 142],
-      hurt: [1158, 112, 89, 116],
-      crouch: [1276, 128, 90, 99],
-      jump: [1379, 62, 119, 157],
+      idle: [252, 144, 171, 216],
+      idle2: [462, 145, 170, 215],
+      walk1: [703, 147, 151, 213],
+      walk2: [885, 149, 164, 211],
+      walk3: [1070, 149, 159, 211],
+      walk4: [1265, 146, 157, 214],
+      aim: [51, 482, 230, 219],
+      shoot: [329, 483, 235, 218],
+      recoil: [672, 486, 197, 215],
+      reload: [957, 479, 196, 222],
+      reload2: [1220, 478, 193, 223],
+      hurt: [88, 814, 156, 224],
+      crouch: [509, 850, 234, 188],
+      jump: [1051, 728, 211, 306],
     },
   },
   {
@@ -194,7 +204,9 @@ const IMAGES = [
   { key: 'logo', rect: [25, 28, 448, 178], scale: 1, outline: false },
   { key: 'vulturePerched', rect: [1133, 292, 118, 182], scale: 0.9, components: false },
   { key: 'vultureHead', rect: [1299, 331, 181, 143], scale: 0.6 },
-  { key: 'portrait', rect: [42, 806, 94, 86], scale: 0.7, components: false, outline: false },
+  { key: 'portrait', source: 'hunter', rect: [34, 103, 164, 159], scale: 0.34, components: false, outline: false },
+  // Choza del fondo (imgs/choza_para_background.png)
+  { key: 'hut', source: 'hut', rect: [10, 228, 548, 657], scale: 0.5, components: false, keyAllDark: true, minSpeck: 40 },
   { key: 'iconVulture', rect: [321, 915, 47, 46], scale: 0.85 },
   { key: 'iconVultureEmpty', rect: [455, 914, 45, 48], scale: 0.85, outline: false, keyAllDark: true },
   { key: 'shotgun', rect: [589, 828, 140, 91], scale: 0.6 },
@@ -252,7 +264,22 @@ const SOURCES = {
     fg: (r, g, b) => colorDist(r, g, b, SERFOR_BG) > 40,
     hole: (r, g, b) => colorDist(r, g, b, SERFOR_BG) <= 10,
   },
-  // Misma convención que la hoja principal: fondo negro
+  // Mismas convenciones que la hoja principal (fondo negro)
+  hunter: {
+    file: HUNTER_SOURCE,
+    bg: (r, g, b) => Math.max(r, g, b) <= BLACK_THRESHOLD,
+    fg: (r, g, b) => Math.max(r, g, b) > FG_THRESHOLD,
+    hole: (r, g, b) => Math.max(r, g, b) <= 6,
+  },
+  hut: {
+    file: HUT_SOURCE,
+    // La choza es una estructura abierta: el fondo negro se ve por dentro,
+    // así que se quita el negro en toda la imagen (keyAllDark), con un umbral
+    // algo más alto para el halo de compresión.
+    bg: (r, g, b) => Math.max(r, g, b) <= 34,
+    fg: (r, g, b) => Math.max(r, g, b) > FG_THRESHOLD,
+    hole: (r, g, b) => Math.max(r, g, b) <= 6,
+  },
   girl: {
     file: GIRL_SOURCE,
     bg: (r, g, b) => Math.max(r, g, b) <= BLACK_THRESHOLD,

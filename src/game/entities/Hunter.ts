@@ -14,7 +14,7 @@ export enum HunterPose {
 }
 
 /** Punta del cañón relativa a los pies (origen 0.5, 1) en el frame "apuntando" */
-const MUZZLE = { x: 70, y: -101 };
+const MUZZLE = { x: 77, y: -114 };
 
 /**
  * El cazador. Usa SIEMPRE el mismo sprite ("apuntando"): las poses del
