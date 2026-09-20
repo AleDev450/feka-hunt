@@ -37,6 +37,28 @@ export class Dog extends Phaser.GameObjects.Sprite {
     this.runTo(target, () => this.excited(2, () => this.goHome()));
   }
 
+  /**
+   * El jugador falló el disparo: el perro se queja ("¡awa!"), da un saltito
+   * hacia atrás y vuelve a sentarse.
+   */
+  complain(): void {
+    this.cancel();
+    this.dogState = DogState.LADRANDO;
+    this.setFrame(frameIndex('dog', 'bark'));
+    this.audio?.play('awa');
+    this.scene.tweens.add({
+      targets: this,
+      y: WORLD.dog.y - 12,
+      duration: 110,
+      yoyo: true,
+      repeat: 1,
+      ease: 'Quad.easeOut',
+      onComplete: () => {
+        if (this.dogState === DogState.LADRANDO) this.sit();
+      },
+    });
+  }
+
   /** Ladra (se burla) cuando un gallinazo escapa. */
   bark(): void {
     this.cancel();

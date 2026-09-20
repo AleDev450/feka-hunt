@@ -22,12 +22,11 @@ export const WORLD = {
   dog: { homeX: 1150, y: 706, minX: 300, maxX: 1200 },
 } as const;
 
-/** Grupo de amigos que anima al fondo (detrás de la laguna) — imgs/grupo_amigos_2.jpg */
+/** Grupo de amigos que anima al fondo (detrás de la laguna) — imgs/grupo_amigos_3.png */
 export const FRIENDS = {
   x: 640,
   /** Pies del grupo (sobre el campo, al fondo) */
   y: 550,
-  spacing: 46,
   cheerMs: 1400,
   sadMs: 1800,
   /** Tristeza corta al fallar un disparo (sin mensaje) */

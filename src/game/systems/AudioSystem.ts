@@ -15,6 +15,7 @@ export type SfxKey =
   | 'levelup'
   | 'extraLife'
   | 'bark'
+  | 'awa'
   | 'gameover';
 
 /** Sonidos en bucle (se inician y detienen explícitamente) */
@@ -38,6 +39,8 @@ export const AUDIO_FILES: Record<SfxKey | LoopKey, string | null> = {
   levelup: null,
   extraLife: null,
   bark: null,
+  /** Queja del perro cuando el jugador falla */
+  awa: '/assets/audio/awa.mp3',
   gameover: null,
   siren: null,
 };

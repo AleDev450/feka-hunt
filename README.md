@@ -64,10 +64,14 @@ Además los giros en zigzag son cada vez más bruscos y las trayectorias fácile
 
 ## Personajes
 
+- **Gallinazos** (`imgs/gallinazos.png`): 6 tipos (clásico, narizón, serio, e-sport, mohicano y tranquilo).
+  Cada gallinazo que aparece sortea su tipo; cada tipo tiene su propio aleteo, caída y pose de muerto.
+- **Perro** (`src/game/entities/Dog.ts`): corre a recoger el gallinazo abatido, ladra cuando uno escapa y
+  se queja con `public/assets/audio/awa.mp3` cuando el jugador falla un disparo.
 - **Cazador** (`imgs/nuevo_personaje.png`): usa un único sprite ("apuntando"); disparo, recarga, daño y celebración
   son efectos (retroceso, fogonazo, destello rojo, salto). De esa hoja sale también el retrato del HUD.
-- **Grupo de amigos** (`imgs/grupo_amigos_2.jpg`, `src/game/entities/FriendsGroup.ts`): al fondo, detrás de la laguna.
-  Animan (4 poses) cada gallinazo abatido y se ponen tristes (3 poses) al fallar o cuando uno escapa, con sus frases. Posición, tiempos y frases en `FRIENDS` (settings.ts).
+- **Grupo de amigos** (`imgs/grupo_amigos_3.png`, `src/game/entities/FriendsGroup.ts`): al fondo, detrás de la laguna.
+  La hoja trae al grupo entero dibujado junto: un solo sprite con 4 poses animando y 4 tristes. Animan cada gallinazo abatido y se entristecen al fallar o cuando uno escapa, con sus frases. Posición, tiempos y frases en `FRIENDS` (settings.ts).
 
 ## Escenario
 

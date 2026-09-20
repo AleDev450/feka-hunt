@@ -1,9 +1,16 @@
 import Phaser from 'phaser';
-import { ANIM, frameIndex, framesByIndex, type FrameMeta } from '../config/animations';
+import {
+  framesByIndex,
+  VULTURE_TYPES,
+  vultureFlyAnim,
+  vultureFrame,
+  type FrameMeta,
+  type VultureType,
+} from '../config/animations';
 import { SPRITE_SHEETS } from '../config/assetManifest';
 import { DEPTH, GAME_WIDTH, TIMING, WORLD, type FlightPattern, type SpawnSide } from '../config/settings';
 import type { DifficultyParams } from '../systems/DifficultySystem';
-import { distanceToRect, randomRange } from '../utils/gameUtils';
+import { distanceToRect, pick, randomRange } from '../utils/gameUtils';
 
 export enum VultureState {
   FLYING = 'FLYING',
@@ -18,8 +25,6 @@ export type HitZone = 'head' | 'body';
 
 const FRAMES: FrameMeta[] = framesByIndex('vulture');
 const { frameWidth: FW, frameHeight: FH } = SPRITE_SHEETS.vulture;
-const FALL_FRAME = frameIndex('vulture', 'fall');
-const DEAD_FRAME = frameIndex('vulture', 'dead');
 /** Proporción del sprite que se descuenta del hitbox (alas con plumas sueltas) */
 const HITBOX_INSET = 0.12;
 
@@ -35,6 +40,8 @@ export class Vulture extends Phaser.GameObjects.Sprite {
   private vy = 0;
   private speed = 0;
   private pattern: FlightPattern = 'straight';
+  /** Tipo de gallinazo de esta vuelta (se sortea en cada aparición) */
+  private vType: VultureType = 'clasico';
   private elapsed = 0;
   private flyTimeMs = 0;
   private stateTimer = 0;
@@ -82,8 +89,9 @@ export class Vulture extends Phaser.GameObjects.Sprite {
     }
 
     this.vState = VultureState.FLYING;
+    this.vType = pick(VULTURE_TYPES);
     this.setActive(true).setVisible(true).setAlpha(1).setDepth(DEPTH.vultures);
-    this.play(ANIM.vultureFly);
+    this.play(vultureFlyAnim(this.vType));
     this.anims.timeScale = params.flapFps / 10;
     return this;
   }
@@ -103,7 +111,7 @@ export class Vulture extends Phaser.GameObjects.Sprite {
     this.vState = VultureState.HIT;
     this.stateTimer = TIMING.hitFreezeMs;
     this.anims.stop();
-    this.setFrame(FALL_FRAME);
+    this.setFrame(vultureFrame(this.vType, 'fall'));
     this.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
     // Delante del pasto para que se vea caer y quedar tendido
     this.setDepth(DEPTH.foreground + 0.5);
@@ -166,7 +174,7 @@ export class Vulture extends Phaser.GameObjects.Sprite {
         if (this.y >= WORLD.landingY) {
           this.y = WORLD.landingY;
           this.vState = VultureState.DEAD;
-          this.setFrame(DEAD_FRAME);
+          this.setFrame(vultureFrame(this.vType, 'dead'));
           this.stateTimer = TIMING.deadVisibleMs;
           this.emit('landed', this);
         }

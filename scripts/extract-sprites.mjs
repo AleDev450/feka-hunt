@@ -18,11 +18,12 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE = join(ROOT, 'imgs', '59348bb2-9d4c-4797-91ad-8a2ce90b9241.png');
 const SERFOR_SOURCE = join(ROOT, 'imgs', 'serfor.png');
-const FRIENDS_SOURCE = join(ROOT, 'imgs', 'grupo_amigos_2.jpg');
+const FRIENDS_SOURCE = join(ROOT, 'imgs', 'grupo_amigos_3.png');
 const FRIENDS_TILE = [54, 53, 71];
 const GIRL_SOURCE = join(ROOT, 'imgs', 'mujer.png');
 const HUNTER_SOURCE = join(ROOT, 'imgs', 'nuevo_personaje.png');
 const HUT_SOURCE = join(ROOT, 'imgs', 'choza_para_background.png');
+const VULTURES_SOURCE = join(ROOT, 'imgs', 'gallinazos.png');
 const OUT_DIR = join(ROOT, 'public', 'assets', 'sprites');
 const MANIFEST = join(ROOT, 'src', 'game', 'config', 'assetManifest.ts');
 
@@ -60,17 +61,53 @@ const SHEETS = [
     },
   },
   {
+    // 6 tipos de gallinazo (ya miran a la derecha, como los espera el juego)
     key: 'vulture',
-    scale: 0.66,
+    source: 'vultures',
+    scale: 0.8,
+    minSpeck: 90,
+    dropIntruders: true,
+    components: false,
     anchor: 'center',
     detectHead: true,
+    holes: true,
     frames: {
-      fly1: [46, 283, 152, 166],
-      fly2: [214, 277, 151, 172],
-      fly3: [363, 292, 154, 165],
-      fly4: [511, 304, 160, 156],
-      fall: [704, 308, 162, 155],
-      dead: [914, 395, 179, 74],
+      clasico_fly1: [204, 108, 169, 128],
+      clasico_fly2: [366, 108, 148, 128],
+      clasico_fly3: [526, 116, 161, 120],
+      clasico_fly4: [680, 118, 151, 118],
+      clasico_fall: [863, 102, 176, 134],
+      clasico_dead: [1057, 169, 169, 67],
+      narizon_fly1: [209, 250, 164, 128],
+      narizon_fly2: [365, 251, 166, 127],
+      narizon_fly3: [523, 256, 164, 122],
+      narizon_fly4: [679, 259, 179, 119],
+      narizon_fall: [871, 255, 178, 123],
+      narizon_dead: [1059, 315, 194, 63],
+      serio_fly1: [204, 389, 162, 125],
+      serio_fly2: [374, 388, 155, 126],
+      serio_fly3: [529, 395, 158, 119],
+      serio_fly4: [679, 395, 168, 119],
+      serio_fall: [864, 395, 176, 119],
+      serio_dead: [1060, 451, 184, 63],
+      esport_fly1: [211, 524, 157, 126],
+      esport_fly2: [376, 524, 155, 126],
+      esport_fly3: [523, 530, 164, 120],
+      esport_fly4: [679, 544, 178, 106],
+      esport_fall: [864, 528, 182, 122],
+      esport_dead: [1058, 587, 193, 63],
+      mohicano_fly1: [209, 658, 153, 121],
+      mohicano_fly2: [376, 662, 150, 117],
+      mohicano_fly3: [531, 668, 154, 111],
+      mohicano_fly4: [686, 667, 166, 112],
+      mohicano_fall: [865, 662, 174, 117],
+      mohicano_dead: [1057, 716, 184, 63],
+      tranquilo_fly1: [206, 790, 160, 124],
+      tranquilo_fly2: [376, 787, 154, 128],
+      tranquilo_fly3: [523, 792, 164, 123],
+      tranquilo_fly4: [679, 798, 173, 118],
+      tranquilo_fall: [865, 790, 181, 127],
+      tranquilo_dead: [1062, 849, 189, 68],
     },
   },
   {
@@ -86,58 +123,22 @@ const SHEETS = [
       excited: [566, 543, 115, 163],
     },
   },
-  // --- Grupo de apoyo (imgs/grupo_amigos_2.jpg): 4 poses animando + 3 tristes por amigo ---
-  // (la 4ª columna "triste" de algunas filas es otro personaje, por eso solo 3)
+  // --- Grupo de apoyo (imgs/grupo_amigos_3.png): el grupo entero en 8 poses ---
   {
     key: 'friends',
     source: 'friends',
-    scale: 0.56,
+    scale: 0.6,
     anchor: 'bottom',
     components: false,
-    holes: true,
     frames: {
-      mascara_cheer1: [26, 110, 111, 110],
-      mascara_cheer2: [154, 110, 130, 110],
-      mascara_cheer3: [303, 110, 128, 110],
-      mascara_cheer4: [450, 110, 119, 110],
-      mascara_sad1: [754, 110, 108, 110],
-      mascara_sad2: [879, 110, 108, 110],
-      mascara_sad3: [1003, 110, 108, 110],
-      mochila_cheer1: [26, 237, 111, 109],
-      mochila_cheer2: [154, 237, 130, 109],
-      mochila_cheer3: [303, 237, 128, 109],
-      mochila_cheer4: [450, 237, 119, 109],
-      mochila_sad1: [754, 237, 108, 109],
-      mochila_sad2: [879, 237, 108, 109],
-      mochila_sad3: [1003, 237, 108, 109],
-      chaqueta_cheer1: [26, 362, 111, 107],
-      chaqueta_cheer2: [154, 362, 130, 107],
-      chaqueta_cheer3: [303, 362, 128, 107],
-      chaqueta_cheer4: [450, 362, 119, 107],
-      chaqueta_sad1: [754, 362, 108, 107],
-      chaqueta_sad2: [879, 362, 108, 107],
-      chaqueta_sad3: [1003, 362, 108, 107],
-      pelolargo_cheer1: [26, 486, 111, 101],
-      pelolargo_cheer2: [154, 486, 130, 101],
-      pelolargo_cheer3: [303, 486, 128, 101],
-      pelolargo_cheer4: [450, 486, 119, 101],
-      pelolargo_sad1: [754, 486, 108, 101],
-      pelolargo_sad2: [879, 486, 108, 101],
-      pelolargo_sad3: [1003, 486, 108, 101],
-      barbudo_cheer1: [26, 604, 111, 101],
-      barbudo_cheer2: [154, 604, 130, 101],
-      barbudo_cheer3: [303, 604, 128, 101],
-      barbudo_cheer4: [450, 604, 119, 101],
-      barbudo_sad1: [754, 604, 108, 101],
-      barbudo_sad2: [879, 604, 108, 101],
-      barbudo_sad3: [1003, 604, 108, 101],
-      auriculares_cheer1: [26, 721, 111, 101],
-      auriculares_cheer2: [154, 721, 130, 101],
-      auriculares_cheer3: [303, 721, 128, 101],
-      auriculares_cheer4: [450, 721, 119, 101],
-      auriculares_sad1: [754, 721, 108, 101],
-      auriculares_sad2: [879, 721, 108, 101],
-      auriculares_sad3: [1003, 721, 108, 101],
+      cheer1: [23, 409, 410, 136],
+      cheer2: [463, 399, 417, 146],
+      cheer3: [903, 371, 414, 174],
+      cheer4: [1344, 395, 407, 150],
+      sad1: [7, 684, 436, 159],
+      sad2: [456, 693, 414, 150],
+      sad3: [898, 727, 418, 117],
+      sad4: [1337, 701, 416, 142],
     },
   },
   // --- Chica (imgs/mujer.png): caminata + llanto ---
@@ -202,7 +203,7 @@ const SHEETS = [
 /** Imágenes sueltas */
 const IMAGES = [
   { key: 'logo', rect: [25, 28, 448, 178], scale: 1, outline: false },
-  { key: 'vulturePerched', rect: [1133, 292, 118, 182], scale: 0.9, components: false },
+  { key: 'vulturePerched', source: 'vultures', rect: [1269, 101, 109, 138], scale: 0.85, components: false },
   { key: 'vultureHead', rect: [1299, 331, 181, 143], scale: 0.6 },
   { key: 'portrait', source: 'hunter', rect: [34, 103, 164, 159], scale: 0.34, components: false, outline: false },
   // Choza del fondo (imgs/choza_para_background.png)
@@ -271,6 +272,12 @@ const SOURCES = {
     fg: (r, g, b) => Math.max(r, g, b) > FG_THRESHOLD,
     hole: (r, g, b) => Math.max(r, g, b) <= 6,
   },
+  vultures: {
+    file: VULTURES_SOURCE,
+    bg: (r, g, b) => Math.max(r, g, b) <= BLACK_THRESHOLD,
+    fg: (r, g, b) => Math.max(r, g, b) > 26,
+    hole: (r, g, b) => Math.max(r, g, b) <= 8,
+  },
   hut: {
     file: HUT_SOURCE,
     // La choza es una estructura abierta: el fondo negro se ve por dentro,
@@ -286,12 +293,13 @@ const SOURCES = {
     fg: (r, g, b) => Math.max(r, g, b) > FG_THRESHOLD,
     hole: (r, g, b) => Math.max(r, g, b) <= 6,
   },
-  // JPEG: cada sprite está dentro de una "baldosa" gris azulada oscura
+  // PNG con transparencia: el fondo ya viene en el canal alfa
   friends: {
     file: FRIENDS_SOURCE,
-    bg: (r, g, b) => colorDist(r, g, b, FRIENDS_TILE) <= 30 || Math.max(r, g, b) <= 14,
-    fg: (r, g, b) => colorDist(r, g, b, FRIENDS_TILE) > 40,
-    hole: (r, g, b) => colorDist(r, g, b, FRIENDS_TILE) <= 16,
+    useAlpha: true,
+    bg: () => false,
+    fg: () => true,
+    hole: () => false,
   },
 };
 
@@ -320,7 +328,8 @@ function labelComponents() {
   const D = 2;
   const fg = new Uint8Array(SW * SH);
   for (let i = 0; i < SW * SH; i++) {
-    if (current.fg(SD[i * 4], SD[i * 4 + 1], SD[i * 4 + 2])) fg[i] = 1;
+    const opaque = current.useAlpha === true ? SD[i * 4 + 3] >= 20 : true;
+    if (opaque && current.fg(SD[i * 4], SD[i * 4 + 1], SD[i * 4 + 2])) fg[i] = 1;
   }
   const dil = new Uint8Array(SW * SH);
   for (let y = 0; y < SH; y++) {
@@ -382,7 +391,10 @@ function cutout(rect, opts = {}) {
   }
 
   const sky = bg === 'sky' ? [data[0], data[1], data[2]] : null;
+  const byAlpha = current.useAlpha === true;
   const isBg = (i) => {
+    // Hojas con transparencia: el fondo es simplemente lo transparente
+    if (byAlpha) return data[i * 4 + 3] < 20;
     const r = data[i * 4], g = data[i * 4 + 1], b = data[i * 4 + 2];
     if (current.bg(r, g, b)) return true;
     if (sky) {
@@ -426,7 +438,53 @@ function cutout(rect, opts = {}) {
   }
   if (holes) removeHoles({ w: rw, h: rh, data });
   removeSpecks({ w: rw, h: rh, data }, minSpeck);
+  if (opts.dropIntruders) removeEdgeIntruders({ w: rw, h: rh, data });
   return trim({ w: rw, h: rh, data });
+}
+
+/**
+ * Quita trozos del sprite vecino: grupos pegados al borde izquierdo o derecho
+ * del recorte que son mucho más pequeños que la figura principal (las celdas
+ * de algunas hojas se solapan entre sí).
+ */
+function removeEdgeIntruders(img) {
+  const { w, h, data } = img;
+  const groups = opaqueGroups(img);
+  if (groups.length < 2) return;
+  const biggest = Math.max(...groups.map((g) => g.pixels.length));
+  for (const group of groups) {
+    const touchesSide = group.pixels.some((i) => i % w === 0 || i % w === w - 1);
+    if (touchesSide && group.pixels.length < biggest * 0.25) {
+      for (const i of group.pixels) data[i * 4 + 3] = 0;
+    }
+  }
+  void h;
+}
+
+/** Grupos de píxeles opacos conectados (4-vecinos). */
+function opaqueGroups(img) {
+  const { w, h, data } = img;
+  const seen = new Uint8Array(w * h);
+  const groups = [];
+  for (let i = 0; i < w * h; i++) {
+    if (seen[i] || data[i * 4 + 3] === 0) continue;
+    const pixels = [];
+    const stack = [i];
+    seen[i] = 1;
+    while (stack.length) {
+      const j = stack.pop();
+      pixels.push(j);
+      const x = j % w;
+      const y = (j / w) | 0;
+      for (const [nx, ny] of [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]) {
+        if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+        const k = ny * w + nx;
+        if (!seen[k] && data[k * 4 + 3] !== 0) { seen[k] = 1; stack.push(k); }
+      }
+    }
+    groups.push({ pixels });
+  }
+  return groups;
 }
 
 /** Huecos cerrados de fondo puro (p. ej. entre las patas del perro). */
@@ -547,6 +605,18 @@ function outline(img) {
   return { w, h, data };
 }
 
+/** Espeja la imagen horizontalmente. */
+function flop(img) {
+  const data = Buffer.alloc(img.w * img.h * 4);
+  for (let y = 0; y < img.h; y++) {
+    for (let x = 0; x < img.w; x++) {
+      const src = (y * img.w + x) * 4;
+      img.data.copy(data, (y * img.w + (img.w - 1 - x)) * 4, src, src + 4);
+    }
+  }
+  return { w: img.w, h: img.h, data };
+}
+
 function mirrorConcat(img) {
   const w = img.w * 2;
   const data = Buffer.alloc(w * img.h * 4);
@@ -560,17 +630,26 @@ function mirrorConcat(img) {
   return { w, h: img.h, data };
 }
 
-/** Centroide de los píxeles rojizos (cabeza del gallinazo). */
+/**
+ * Centro de la cabeza del gallinazo (para los headshots). Busca píxeles de
+ * piel/rojo (cara, pico y cuello) y se queda con el grupo más adelantado:
+ * los sprites miran a la derecha, así que la cabeza es lo más a la derecha.
+ */
 function findHead(img) {
-  let sx = 0, sy = 0, n = 0;
+  const matches = [];
   for (let y = 0; y < img.h; y++) {
     for (let x = 0; x < img.w; x++) {
       const i = (y * img.w + x) * 4;
       const r = img.data[i], g = img.data[i + 1], b = img.data[i + 2];
-      if (img.data[i + 3] && r > 120 && r - g > 55 && r - b > 20) { sx += x; sy += y; n++; }
+      if (img.data[i + 3] && r > 140 && r - b > 45 && g < r - 25) matches.push({ x, y });
     }
   }
-  return n > 8 ? { x: sx / n, y: sy / n } : null;
+  if (matches.length <= 8) return null;
+  const minX = Math.min(...matches.map((m) => m.x));
+  const maxX = Math.max(...matches.map((m) => m.x));
+  const front = matches.filter((m) => m.x >= maxX - (maxX - minX) * 0.45);
+  const sum = front.reduce((acc, m) => ({ x: acc.x + m.x, y: acc.y + m.y }), { x: 0, y: 0 });
+  return { x: sum.x / front.length, y: sum.y / front.length };
 }
 
 async function save(img, key) {
@@ -596,6 +675,7 @@ for (const sheet of SHEETS) {
   const imgs = [];
   for (const name of names) {
     let img = cutout(sheet.frames[name], sheet);
+    if (sheet.flop) img = flop(img);
     img = await resize(img, sheet.scale);
     img = outline(img);
     imgs.push(img);
@@ -626,6 +706,7 @@ for (const sheet of SHEETS) {
 for (const def of IMAGES) {
   await useSource(def.source ?? 'main');
   let img = cutout(def.rect, def);
+  if (def.flop) img = flop(img);
   img = await resize(img, def.scale ?? 1);
   if (def.outline !== false) img = outline(img);
   const file = await save(img, def.key);

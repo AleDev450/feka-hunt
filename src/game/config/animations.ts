@@ -24,8 +24,18 @@ export function framesByIndex(sheet: SheetKey): FrameMeta[] {
   return [...frames].sort((a, b) => a.index - b.index);
 }
 
+/** Los 6 tipos de gallinazo de imgs/gallinazos.png */
+export const VULTURE_TYPES = ['clasico', 'narizon', 'serio', 'esport', 'mohicano', 'tranquilo'] as const;
+export type VultureType = (typeof VULTURE_TYPES)[number];
+export type VulturePose = 'fly1' | 'fly2' | 'fly3' | 'fly4' | 'fall' | 'dead';
+
+/** Frame de un tipo concreto de gallinazo */
+export const vultureFrame = (type: VultureType, pose: VulturePose): number =>
+  frameIndex('vulture', `${type}_${pose}` as FrameName<'vulture'>);
+
+export const vultureFlyAnim = (type: VultureType): string => `vulture-fly-${type}`;
+
 export const ANIM = {
-  vultureFly: 'vulture-fly',
   dogRun: 'dog-run',
   dogBark: 'dog-bark',
   agentMaleRun: 'agentMale-run',
@@ -35,15 +45,18 @@ export const ANIM = {
 
 export function registerAnimations(scene: Phaser.Scene): void {
   const { anims } = scene;
-  if (anims.exists(ANIM.vultureFly)) return;
+  if (anims.exists(ANIM.dogRun)) return;
 
-  const fly = (['fly1', 'fly2', 'fly3', 'fly4', 'fly3', 'fly2'] as const).map((f) => frameIndex('vulture', f));
-  anims.create({
-    key: ANIM.vultureFly,
-    frames: anims.generateFrameNumbers('vulture', { frames: fly }),
-    frameRate: 10,
-    repeat: -1,
-  });
+  // Un aleteo por tipo de gallinazo
+  for (const type of VULTURE_TYPES) {
+    const fly = (['fly1', 'fly2', 'fly3', 'fly4', 'fly3', 'fly2'] as const).map((p) => vultureFrame(type, p));
+    anims.create({
+      key: vultureFlyAnim(type),
+      frames: anims.generateFrameNumbers('vulture', { frames: fly }),
+      frameRate: 10,
+      repeat: -1,
+    });
+  }
   anims.create({
     key: ANIM.dogRun,
     frames: anims.generateFrameNumbers('dog', { frames: [frameIndex('dog', 'run'), frameIndex('dog', 'idle')] }),

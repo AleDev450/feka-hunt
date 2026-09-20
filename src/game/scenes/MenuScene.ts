@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ANIM } from '../config/animations';
+import { VULTURE_TYPES, vultureFlyAnim } from '../config/animations';
 import { COLORS, CREDITS, DEPTH, GAME_WIDTH, WORLD } from '../config/settings';
 import { getServices } from '../config/services';
 import { Dog } from '../entities/Dog';
@@ -39,7 +39,7 @@ export class MenuScene extends Phaser.Scene {
         .sprite(-100 - i * 500, 230 + i * 120, 'vulture')
         .setDepth(DEPTH.vultures)
         .setAlpha(0.9)
-        .play(ANIM.vultureFly);
+        .play(vultureFlyAnim(VULTURE_TYPES[i % VULTURE_TYPES.length]));
       return { sprite, speed: 110 + i * 40 };
     });
 

@@ -139,85 +139,475 @@ export const SPRITE_SHEETS = {
   },
   "vulture": {
     "file": "vulture.png",
-    "frameWidth": 116,
-    "frameHeight": 111,
+    "frameWidth": 155,
+    "frameHeight": 109,
     "frames": {
-      "fly1": {
+      "clasico_fly1": {
         "index": 0,
         "body": {
-          "x": 10,
-          "y": 3,
-          "w": 96,
-          "h": 105
+          "x": 19,
+          "y": 4,
+          "w": 116,
+          "h": 101
         },
         "head": {
-          "x": 82.7,
-          "y": 64.1
+          "x": 112.4,
+          "y": 51.3
         }
       },
-      "fly2": {
+      "clasico_fly2": {
         "index": 1,
         "body": {
-          "x": 10,
-          "y": 1,
-          "w": 95,
-          "h": 109
+          "x": 19,
+          "y": 3,
+          "w": 116,
+          "h": 103
         },
         "head": {
-          "x": 82.7,
-          "y": 64.3
+          "x": 113.1,
+          "y": 53.3
         }
       },
-      "fly3": {
+      "clasico_fly3": {
         "index": 2,
         "body": {
-          "x": 9,
-          "y": 3,
-          "w": 97,
-          "h": 104
+          "x": 20,
+          "y": 6,
+          "w": 115,
+          "h": 96
         },
         "head": {
-          "x": 78.4,
-          "y": 68
+          "x": 112.9,
+          "y": 55
         }
       },
-      "fly4": {
+      "clasico_fly4": {
         "index": 3,
         "body": {
-          "x": 7,
-          "y": 6,
-          "w": 101,
-          "h": 98
+          "x": 18,
+          "y": 7,
+          "w": 119,
+          "h": 94
         },
         "head": {
-          "x": 86.7,
-          "y": 65
+          "x": 115.8,
+          "y": 61.5
         }
       },
-      "fall": {
+      "clasico_fall": {
         "index": 4,
         "body": {
           "x": 7,
+          "y": 1,
+          "w": 140,
+          "h": 107
+        },
+        "head": {
+          "x": 115.7,
+          "y": 71.9
+        }
+      },
+      "clasico_dead": {
+        "index": 5,
+        "body": {
+          "x": 10,
+          "y": 28,
+          "w": 134,
+          "h": 52
+        },
+        "head": {
+          "x": 128.3,
+          "y": 59.8
+        }
+      },
+      "narizon_fly1": {
+        "index": 6,
+        "body": {
+          "x": 12,
+          "y": 4,
+          "w": 130,
+          "h": 101
+        },
+        "head": {
+          "x": 113.3,
+          "y": 57.8
+        }
+      },
+      "narizon_fly2": {
+        "index": 7,
+        "body": {
+          "x": 15,
+          "y": 4,
+          "w": 124,
+          "h": 100
+        },
+        "head": {
+          "x": 112.9,
+          "y": 58.9
+        }
+      },
+      "narizon_fly3": {
+        "index": 8,
+        "body": {
+          "x": 14,
           "y": 6,
-          "w": 102,
+          "w": 126,
+          "h": 96
+        },
+        "head": {
+          "x": 115.4,
+          "y": 64.8
+        }
+      },
+      "narizon_fly4": {
+        "index": 9,
+        "body": {
+          "x": 6,
+          "y": 7,
+          "w": 142,
+          "h": 95
+        },
+        "head": {
+          "x": 120,
+          "y": 63.7
+        }
+      },
+      "narizon_fall": {
+        "index": 10,
+        "body": {
+          "x": 7,
+          "y": 5,
+          "w": 140,
           "h": 98
         },
         "head": {
-          "x": 86.6,
-          "y": 78.7
+          "x": 127.6,
+          "y": 77.8
         }
       },
-      "dead": {
-        "index": 5,
+      "narizon_dead": {
+        "index": 11,
         "body": {
           "x": 1,
-          "y": 33,
-          "w": 114,
-          "h": 44
+          "y": 29,
+          "w": 153,
+          "h": 51
         },
         "head": {
-          "x": 86.5,
-          "y": 63
+          "x": 133.5,
+          "y": 65.3
+        }
+      },
+      "serio_fly1": {
+        "index": 12,
+        "body": {
+          "x": 14,
+          "y": 4,
+          "w": 127,
+          "h": 100
+        },
+        "head": {
+          "x": 113.7,
+          "y": 56.3
+        }
+      },
+      "serio_fly2": {
+        "index": 13,
+        "body": {
+          "x": 17,
+          "y": 4,
+          "w": 121,
+          "h": 100
+        },
+        "head": {
+          "x": 111.6,
+          "y": 58.8
+        }
+      },
+      "serio_fly3": {
+        "index": 14,
+        "body": {
+          "x": 15,
+          "y": 6,
+          "w": 124,
+          "h": 96
+        },
+        "head": {
+          "x": 112.9,
+          "y": 64.9
+        }
+      },
+      "serio_fly4": {
+        "index": 15,
+        "body": {
+          "x": 12,
+          "y": 7,
+          "w": 131,
+          "h": 95
+        },
+        "head": {
+          "x": 117.4,
+          "y": 65.5
+        }
+      },
+      "serio_fall": {
+        "index": 16,
+        "body": {
+          "x": 8,
+          "y": 7,
+          "w": 139,
+          "h": 95
+        },
+        "head": {
+          "x": 122.2,
+          "y": 81.5
+        }
+      },
+      "serio_dead": {
+        "index": 17,
+        "body": {
+          "x": 4,
+          "y": 29,
+          "w": 146,
+          "h": 50
+        },
+        "head": {
+          "x": 129,
+          "y": 64.6
+        }
+      },
+      "esport_fly1": {
+        "index": 18,
+        "body": {
+          "x": 16,
+          "y": 5,
+          "w": 123,
+          "h": 99
+        },
+        "head": {
+          "x": 112.3,
+          "y": 49.7
+        }
+      },
+      "esport_fly2": {
+        "index": 19,
+        "body": {
+          "x": 16,
+          "y": 5,
+          "w": 122,
+          "h": 99
+        },
+        "head": {
+          "x": 112.7,
+          "y": 55.2
+        }
+      },
+      "esport_fly3": {
+        "index": 20,
+        "body": {
+          "x": 16,
+          "y": 7,
+          "w": 123,
+          "h": 94
+        },
+        "head": {
+          "x": 115.4,
+          "y": 57.8
+        }
+      },
+      "esport_fly4": {
+        "index": 21,
+        "body": {
+          "x": 9,
+          "y": 12,
+          "w": 136,
+          "h": 84
+        },
+        "head": {
+          "x": 118.4,
+          "y": 54.8
+        }
+      },
+      "esport_fall": {
+        "index": 22,
+        "body": {
+          "x": 6,
+          "y": 6,
+          "w": 143,
+          "h": 97
+        },
+        "head": {
+          "x": 129.5,
+          "y": 80.3
+        }
+      },
+      "esport_dead": {
+        "index": 23,
+        "body": {
+          "x": 1,
+          "y": 29,
+          "w": 152,
+          "h": 50
+        },
+        "head": {
+          "x": 131.8,
+          "y": 61.2
+        }
+      },
+      "mohicano_fly1": {
+        "index": 24,
+        "body": {
+          "x": 17,
+          "y": 5,
+          "w": 120,
+          "h": 99
+        },
+        "head": {
+          "x": 107.2,
+          "y": 48.6
+        }
+      },
+      "mohicano_fly2": {
+        "index": 25,
+        "body": {
+          "x": 19,
+          "y": 8,
+          "w": 117,
+          "h": 93
+        },
+        "head": {
+          "x": 106.7,
+          "y": 53.5
+        }
+      },
+      "mohicano_fly3": {
+        "index": 26,
+        "body": {
+          "x": 17,
+          "y": 10,
+          "w": 121,
+          "h": 88
+        },
+        "head": {
+          "x": 109.3,
+          "y": 59.1
+        }
+      },
+      "mohicano_fly4": {
+        "index": 27,
+        "body": {
+          "x": 12,
+          "y": 10,
+          "w": 130,
+          "h": 89
+        },
+        "head": {
+          "x": 111.9,
+          "y": 61
+        }
+      },
+      "mohicano_fall": {
+        "index": 28,
+        "body": {
+          "x": 9,
+          "y": 8,
+          "w": 136,
+          "h": 93
+        },
+        "head": {
+          "x": 125.2,
+          "y": 77.3
+        }
+      },
+      "mohicano_dead": {
+        "index": 29,
+        "body": {
+          "x": 5,
+          "y": 29,
+          "w": 144,
+          "h": 50
+        },
+        "head": {
+          "x": 128,
+          "y": 63.4
+        }
+      },
+      "tranquilo_fly1": {
+        "index": 30,
+        "body": {
+          "x": 15,
+          "y": 6,
+          "w": 125,
+          "h": 97
+        },
+        "head": {
+          "x": 112.5,
+          "y": 50.1
+        }
+      },
+      "tranquilo_fly2": {
+        "index": 31,
+        "body": {
+          "x": 17,
+          "y": 4,
+          "w": 120,
+          "h": 100
+        },
+        "head": {
+          "x": 109.4,
+          "y": 53.7
+        }
+      },
+      "tranquilo_fly3": {
+        "index": 32,
+        "body": {
+          "x": 16,
+          "y": 6,
+          "w": 122,
+          "h": 96
+        },
+        "head": {
+          "x": 112.6,
+          "y": 59.3
+        }
+      },
+      "tranquilo_fly4": {
+        "index": 33,
+        "body": {
+          "x": 12,
+          "y": 8,
+          "w": 130,
+          "h": 92
+        },
+        "head": {
+          "x": 115.4,
+          "y": 56.4
+        }
+      },
+      "tranquilo_fall": {
+        "index": 34,
+        "body": {
+          "x": 6,
+          "y": 5,
+          "w": 143,
+          "h": 99
+        },
+        "head": {
+          "x": 127.6,
+          "y": 80.4
+        }
+      },
+      "tranquilo_dead": {
+        "index": 35,
+        "body": {
+          "x": 3,
+          "y": 28,
+          "w": 149,
+          "h": 52
+        },
+        "head": {
+          "x": 130.3,
+          "y": 62.6
         }
       }
     }
@@ -276,385 +666,79 @@ export const SPRITE_SHEETS = {
   },
   "friends": {
     "file": "friends.png",
-    "frameWidth": 69,
-    "frameHeight": 66,
+    "frameWidth": 266,
+    "frameHeight": 108,
     "frames": {
-      "mascara_cheer1": {
+      "cheer1": {
         "index": 0,
         "body": {
-          "x": 14,
-          "y": 1,
-          "w": 40,
-          "h": 64
+          "x": 9,
+          "y": 23,
+          "w": 248,
+          "h": 84
         }
       },
-      "mascara_cheer2": {
+      "cheer2": {
         "index": 1,
         "body": {
-          "x": 2,
-          "y": 1,
-          "w": 64,
-          "h": 64
+          "x": 7,
+          "y": 17,
+          "w": 252,
+          "h": 90
         }
       },
-      "mascara_cheer3": {
+      "cheer3": {
         "index": 2,
         "body": {
-          "x": 13,
+          "x": 8,
           "y": 1,
-          "w": 42,
-          "h": 64
+          "w": 250,
+          "h": 106
         }
       },
-      "mascara_cheer4": {
+      "cheer4": {
         "index": 3,
         "body": {
-          "x": 5,
-          "y": 1,
-          "w": 58,
-          "h": 64
+          "x": 10,
+          "y": 15,
+          "w": 246,
+          "h": 92
         }
       },
-      "mascara_sad1": {
+      "sad1": {
         "index": 4,
         "body": {
-          "x": 13,
-          "y": 1,
-          "w": 42,
-          "h": 64
+          "x": 1,
+          "y": 10,
+          "w": 264,
+          "h": 97
         }
       },
-      "mascara_sad2": {
+      "sad2": {
         "index": 5,
         "body": {
-          "x": 16,
-          "y": 1,
-          "w": 36,
-          "h": 64
+          "x": 8,
+          "y": 15,
+          "w": 250,
+          "h": 92
         }
       },
-      "mascara_sad3": {
+      "sad3": {
         "index": 6,
         "body": {
-          "x": 16,
-          "y": 1,
-          "w": 37,
-          "h": 64
+          "x": 6,
+          "y": 35,
+          "w": 253,
+          "h": 72
         }
       },
-      "mochila_cheer1": {
+      "sad4": {
         "index": 7,
         "body": {
-          "x": 6,
-          "y": 2,
-          "w": 56,
-          "h": 63
-        }
-      },
-      "mochila_cheer2": {
-        "index": 8,
-        "body": {
-          "x": 6,
-          "y": 2,
-          "w": 56,
-          "h": 63
-        }
-      },
-      "mochila_cheer3": {
-        "index": 9,
-        "body": {
-          "x": 13,
-          "y": 2,
-          "w": 43,
-          "h": 63
-        }
-      },
-      "mochila_cheer4": {
-        "index": 10,
-        "body": {
           "x": 7,
-          "y": 2,
-          "w": 55,
-          "h": 63
-        }
-      },
-      "mochila_sad1": {
-        "index": 11,
-        "body": {
-          "x": 14,
-          "y": 4,
-          "w": 40,
-          "h": 61
-        }
-      },
-      "mochila_sad2": {
-        "index": 12,
-        "body": {
-          "x": 14,
-          "y": 4,
-          "w": 40,
-          "h": 61
-        }
-      },
-      "mochila_sad3": {
-        "index": 13,
-        "body": {
-          "x": 13,
-          "y": 5,
-          "w": 42,
-          "h": 60
-        }
-      },
-      "chaqueta_cheer1": {
-        "index": 14,
-        "body": {
-          "x": 18,
-          "y": 4,
-          "w": 33,
-          "h": 61
-        }
-      },
-      "chaqueta_cheer2": {
-        "index": 15,
-        "body": {
-          "x": 14,
-          "y": 3,
-          "w": 41,
-          "h": 62
-        }
-      },
-      "chaqueta_cheer3": {
-        "index": 16,
-        "body": {
-          "x": 10,
-          "y": 3,
-          "w": 49,
-          "h": 62
-        }
-      },
-      "chaqueta_cheer4": {
-        "index": 17,
-        "body": {
-          "x": 11,
-          "y": 3,
-          "w": 46,
-          "h": 62
-        }
-      },
-      "chaqueta_sad1": {
-        "index": 18,
-        "body": {
-          "x": 16,
-          "y": 5,
-          "w": 36,
-          "h": 60
-        }
-      },
-      "chaqueta_sad2": {
-        "index": 19,
-        "body": {
-          "x": 16,
-          "y": 5,
-          "w": 36,
-          "h": 60
-        }
-      },
-      "chaqueta_sad3": {
-        "index": 20,
-        "body": {
-          "x": 14,
-          "y": 7,
-          "w": 40,
-          "h": 58
-        }
-      },
-      "pelolargo_cheer1": {
-        "index": 21,
-        "body": {
-          "x": 16,
-          "y": 6,
-          "w": 36,
-          "h": 59
-        }
-      },
-      "pelolargo_cheer2": {
-        "index": 22,
-        "body": {
-          "x": 15,
-          "y": 8,
-          "w": 38,
-          "h": 57
-        }
-      },
-      "pelolargo_cheer3": {
-        "index": 23,
-        "body": {
-          "x": 14,
-          "y": 6,
-          "w": 41,
-          "h": 59
-        }
-      },
-      "pelolargo_cheer4": {
-        "index": 24,
-        "body": {
-          "x": 9,
-          "y": 6,
-          "w": 50,
-          "h": 59
-        }
-      },
-      "pelolargo_sad1": {
-        "index": 25,
-        "body": {
-          "x": 18,
-          "y": 8,
-          "w": 33,
-          "h": 57
-        }
-      },
-      "pelolargo_sad2": {
-        "index": 26,
-        "body": {
-          "x": 16,
-          "y": 10,
-          "w": 37,
-          "h": 55
-        }
-      },
-      "pelolargo_sad3": {
-        "index": 27,
-        "body": {
-          "x": 15,
-          "y": 12,
-          "w": 39,
-          "h": 53
-        }
-      },
-      "barbudo_cheer1": {
-        "index": 28,
-        "body": {
-          "x": 10,
-          "y": 6,
-          "w": 48,
-          "h": 59
-        }
-      },
-      "barbudo_cheer2": {
-        "index": 29,
-        "body": {
-          "x": 7,
-          "y": 6,
-          "w": 54,
-          "h": 59
-        }
-      },
-      "barbudo_cheer3": {
-        "index": 30,
-        "body": {
-          "x": 1,
-          "y": 6,
-          "w": 67,
-          "h": 59
-        }
-      },
-      "barbudo_cheer4": {
-        "index": 31,
-        "body": {
-          "x": 3,
-          "y": 6,
-          "w": 63,
-          "h": 59
-        }
-      },
-      "barbudo_sad1": {
-        "index": 32,
-        "body": {
-          "x": 16,
-          "y": 6,
-          "w": 36,
-          "h": 59
-        }
-      },
-      "barbudo_sad2": {
-        "index": 33,
-        "body": {
-          "x": 16,
-          "y": 6,
-          "w": 36,
-          "h": 59
-        }
-      },
-      "barbudo_sad3": {
-        "index": 34,
-        "body": {
-          "x": 18,
-          "y": 9,
-          "w": 33,
-          "h": 56
-        }
-      },
-      "auriculares_cheer1": {
-        "index": 35,
-        "body": {
-          "x": 13,
-          "y": 6,
-          "w": 43,
-          "h": 59
-        }
-      },
-      "auriculares_cheer2": {
-        "index": 36,
-        "body": {
-          "x": 10,
-          "y": 6,
-          "w": 48,
-          "h": 59
-        }
-      },
-      "auriculares_cheer3": {
-        "index": 37,
-        "body": {
-          "x": 11,
-          "y": 6,
-          "w": 47,
-          "h": 59
-        }
-      },
-      "auriculares_cheer4": {
-        "index": 38,
-        "body": {
-          "x": 9,
-          "y": 6,
-          "w": 51,
-          "h": 59
-        }
-      },
-      "auriculares_sad1": {
-        "index": 39,
-        "body": {
-          "x": 19,
-          "y": 6,
-          "w": 31,
-          "h": 59
-        }
-      },
-      "auriculares_sad2": {
-        "index": 40,
-        "body": {
-          "x": 16,
-          "y": 6,
-          "w": 36,
-          "h": 59
-        }
-      },
-      "auriculares_sad3": {
-        "index": 41,
-        "body": {
-          "x": 18,
-          "y": 7,
-          "w": 32,
-          "h": 58
+          "y": 20,
+          "w": 252,
+          "h": 87
         }
       }
     }
@@ -942,8 +1026,8 @@ export const IMAGES = {
   },
   "vulturePerched": {
     "file": "vulturePerched.png",
-    "width": 99,
-    "height": 160
+    "width": 95,
+    "height": 119
   },
   "vultureHead": {
     "file": "vultureHead.png",

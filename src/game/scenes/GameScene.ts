@@ -301,6 +301,7 @@ export class GameScene extends Phaser.Scene {
       this.score.registerMiss();
       this.floating.show(x, y - 24, 'FALLO', COLORS.grey, 12, 24);
       this.friends.sad(FRIENDS.missMs, false);
+      this.dog.complain();
     } else {
       if (hitsThisShot > 1) this.floating.show(GAME_WIDTH / 2, 200, `¡DOBLETE! x${hitsThisShot}`, COLORS.goldText, 22);
       this.grantExtraLives();
