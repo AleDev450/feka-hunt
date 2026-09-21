@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "sprites": "node scripts/extract-sprites.mjs"
+    "sprites": "node scripts/extract-sprites.mjs",
+    "sprites:cholo": "node scripts/extract-cholo-assets.mjs",
+    "test:cholo": "node --test scripts/test-cholov2.cjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

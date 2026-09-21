@@ -1,12 +1,13 @@
 import type { LeaderboardQuery, ScoreEntry, ScoreSubmission } from '@/types/game';
 import { periodStart, sanitizePlayerName, type ScoreRepository } from './ScoreRepository';
 
-const STORAGE_KEY = 'gallinazo-hunt:scores';
 const MAX_STORED = 200;
 
 /** Ranking guardado en el navegador. Se usa mientras no haya Supabase configurado. */
 export class LocalScoreRepository implements ScoreRepository {
   readonly source = 'local' as const;
+
+  constructor(private readonly gameId = 'gallinazo-hunt') {}
 
   async submit({ playerName, result, eventId, seasonId }: ScoreSubmission): Promise<ScoreEntry> {
     const entry: ScoreEntry = {
@@ -40,7 +41,7 @@ export class LocalScoreRepository implements ScoreRepository {
 
   private read(): ScoreEntry[] {
     try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
+      const raw = window.localStorage.getItem(`${this.gameId}:scores`);
       const parsed: unknown = raw ? JSON.parse(raw) : [];
       return Array.isArray(parsed) ? (parsed as ScoreEntry[]) : [];
     } catch {
@@ -50,7 +51,7 @@ export class LocalScoreRepository implements ScoreRepository {
 
   private write(entries: ScoreEntry[]): void {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      window.localStorage.setItem(`${this.gameId}:scores`, JSON.stringify(entries));
     } catch {
       // Almacenamiento no disponible (modo privado): el ranking queda solo en memoria
     }

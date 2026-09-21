@@ -12,10 +12,10 @@ export default function HomePage() {
           <span className="adventure__name">GALLINAZO HUNT</span>
           <span className="adventure__action">▶ JUGAR</span>
         </Link>
-        <div className="adventure adventure--locked" aria-label="Cholo Factos Lima Racing, en desarrollo">
+        <div className="adventure adventure--cholo adventure--disabled" aria-disabled="true">
           <div className="adventure__placeholder">CHOLO<br />FACTOS</div>
           <span className="adventure__name">CHOLO FACTOS: LIMA RACING</span>
-          <span className="adventure__action">EN DESARROLLO</span>
+          <span className="adventure__action">▶ JUGAR</span>
         </div>
       </section>
       <p className="landing__footer">MOUSE O TOUCH · PC · TABLET · MOVIL</p>

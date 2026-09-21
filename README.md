@@ -3,6 +3,8 @@
 Arcade retro 16-bit peruano de gallinazos: apunta, dispara y consigue el récord.
 Stack: **Next.js 16 + Phaser 4 + TypeScript**, con **Supabase** opcional para el ranking online y deploy en **Vercel**.
 
+**Cholo Factos: Lima Racing** está archivado en `/cholov2`: taxi con perspectiva desde atrás, pasajeros, tráfico y persecuciones. Consulta [controles, recursos y validación](src/cholov2/README.md). Sus resultados se guardan en un ranking local independiente.
+
 ## Uso
 
 ```bash

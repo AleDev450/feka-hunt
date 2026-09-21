@@ -36,13 +36,14 @@ const toEntry = (row: ScoreRow): ScoreEntry => ({
 export class SupabaseScoreRepository implements ScoreRepository {
   readonly source = 'online' as const;
 
-  constructor(private readonly supabase: SupabaseClient) {}
+  constructor(private readonly supabase: SupabaseClient, private readonly gameId = 'gallinazo-hunt') {}
 
   async submit({ playerName, result, eventId, seasonId }: ScoreSubmission): Promise<ScoreEntry> {
     const { data: auth } = await this.supabase.auth.getUser();
     const { data, error } = await this.supabase
       .from('scores')
       .insert({
+        game_id: this.gameId,
         user_id: auth.user?.id ?? null,
         player_name: sanitizePlayerName(playerName),
         score: result.score,
@@ -63,7 +64,7 @@ export class SupabaseScoreRepository implements ScoreRepository {
   }
 
   async getLeaderboard({ period, limit, eventId, seasonId }: LeaderboardQuery): Promise<ScoreEntry[]> {
-    let query = this.supabase.from('scores').select('*').order('score', { ascending: false }).limit(limit);
+    let query = this.supabase.from('scores').select('*').eq('game_id', this.gameId).order('score', { ascending: false }).limit(limit);
     const since = periodStart(period);
     if (since) query = query.gte('created_at', since);
     if (eventId) query = query.eq('event_id', eventId);

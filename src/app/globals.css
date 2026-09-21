@@ -63,6 +63,11 @@ a {
 .adventure--available:hover, .adventure--available:focus-visible { transform: translate(2px, 2px); }
 .adventure--available img { width: min(300px, 80%); height: auto; }
 .adventure--locked { background: #6b6b72; color: #d8d8dc; cursor: not-allowed; }
+.adventure--cholo { color: #fff; background: linear-gradient(rgba(12, 7, 16, .48), rgba(12, 7, 16, .9)), url('/assets/cholov2-inicio.png') center / cover; }
+.adventure--cholo:hover, .adventure--cholo:focus-visible { transform: translate(2px, 2px); }
+.adventure--disabled { cursor: not-allowed; filter: grayscale(.7); opacity: .6; }
+.adventure--disabled:hover, .adventure--disabled:focus-visible { transform: none; }
+.adventure--cholo .adventure__action { color: #ffd23f; }
 .adventure__placeholder { font-size: clamp(26px, 5vw, 44px); line-height: 1; color: #bcbcc4; text-shadow: 4px 4px 0 #3d3d45; }
 .adventure__name { font-size: clamp(11px, 1.8vw, 16px); text-align: center; }
 .adventure__action { font-size: 12px; color: #1a0f1a; }
@@ -132,7 +137,7 @@ a {
   opacity: 0.8;
 }
 
-.cholo-home { min-height: 100dvh; display: grid; place-items: center; padding: 24px; background: #16131d url('/assets/cholo-inicio.png') center / cover no-repeat; }
+.cholo-home { min-height: 100dvh; display: grid; place-items: center; padding: 24px; background: #16131d url('/assets/cholov2-inicio.png') center / cover no-repeat; }
 .cholo-home__panel { width: min(560px, 94vw); padding: 34px; text-align: center; background: rgba(10, 8, 16, .86); border: 4px solid #f5a623; border-radius: 12px; box-shadow: 8px 8px #09070d; }
 .cholo-home h1 { margin: 0; color: #f5a623; font-size: clamp(32px, 8vw, 64px); text-shadow: 4px 4px #29152b; }
 .cholo-home h2 { margin: 4px 0 22px; color: #fff; font-size: clamp(18px, 4vw, 30px); }
@@ -164,6 +169,13 @@ a {
 .game-canvas canvas {
   image-rendering: pixelated;
   display: block;
+}
+
+.cholo-canvas canvas { image-rendering: auto; touch-action: none; }
+.cholo-load-error { position: absolute; inset: 25%; padding: 24px; color: white; background: #111723; font-family: Arial, sans-serif; line-height: 1.6; }
+.cholo-rotate-hint { display: none; }
+@media (orientation: portrait) and (max-width: 820px) {
+  .cholo-rotate-hint { display: block; position: absolute; bottom: max(24px, env(safe-area-inset-bottom)); left: 24px; right: 24px; color: #ffdc5d; text-align: center; font: 16px/1.5 Arial, sans-serif; pointer-events: none; }
 }
 
 .rotate-hint {

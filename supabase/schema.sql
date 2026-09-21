@@ -19,6 +19,8 @@ create table if not exists public.games (
 );
 insert into public.games (id, name) values ('gallinazo-hunt', 'Gallinazo Hunt')
 on conflict (id) do nothing;
+insert into public.games (id, name) values ('cholo-factos', 'Cholo Factos: Lima Racing')
+on conflict (id) do nothing;
 
 -- Temporadas y eventos (Fase 4) ------------------------------------------------
 create table if not exists public.seasons (
